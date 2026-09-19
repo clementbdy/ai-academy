@@ -5,6 +5,7 @@ import { contextEngineeringBundle } from "@/content/domains/context-engineering"
 import { assistantsIaBundle } from "@/content/domains/assistants-ia";
 import { automatisationBundle } from "@/content/domains/automatisation";
 import { programmationAssisteeBundle } from "@/content/domains/programmation-assistee";
+import { agentsIaBundle } from "@/content/domains/agents-ia";
 import { tools as toolEntries } from "@/content/tools";
 import { projects as projectEntries } from "@/content/projects";
 
@@ -16,6 +17,7 @@ const domainBundles: DomainBundle[] = [
   assistantsIaBundle,
   automatisationBundle,
   programmationAssisteeBundle,
+  agentsIaBundle,
 ];
 
 export const domains: Domain[] = domainBundles.map((b) => b.domain);
