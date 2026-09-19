@@ -28,14 +28,18 @@ export function getSkillStatus(skill: Skill, levels: LevelMap): SkillStatus {
 
 /**
  * Parcourt les compétences dans l'ordre du contenu (domaine -> module -> skill)
- * et renvoie la première compétence débloquée non encore maîtrisée.
+ * et renvoie la première compétence débloquée qui n'a pas encore atteint le
+ * niveau "Utilisation". On s'arrête à ce seuil, pas à "Maîtrisé" (niveau 4) :
+ * les niveaux 4-5 ne sont pas encore calculables automatiquement (ils
+ * viendront avec les projets et le Coach IA), donc les y attendre bloquerait
+ * la recommandation indéfiniment sur la même compétence.
  */
 export function getNextRecommendedSkill(levels: LevelMap): Skill | null {
   for (const domain of domains) {
     for (const mod of getModulesByDomain(domain.id)) {
       for (const skill of getSkillsByModule(mod.id)) {
-        const status = getSkillStatus(skill, levels);
-        if (status === "todo" || status === "in_progress") {
+        if (!isSkillUnlocked(skill, levels)) continue;
+        if (getLevel(levels, skill.id) < MASTERY_THRESHOLD) {
           return skill;
         }
       }

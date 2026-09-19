@@ -8,10 +8,14 @@ import {
   getLessonsBySkill,
   getExercisesBySkill,
 } from "@/content/registry";
-import { getLevelMap } from "@/lib/skill-progress";
+import { getLevelMap, getSkillActivityState } from "@/lib/skill-progress";
 import { getLevel, getSkillStatus, isSkillUnlocked } from "@/lib/progress";
 import { SkillStatusBadge } from "@/components/SkillStatusBadge";
+import { QuizRunner } from "@/components/QuizRunner";
+import { GuidedExerciseRunner } from "@/components/GuidedExerciseRunner";
+import { CriteriaExerciseRunner } from "@/components/CriteriaExerciseRunner";
 import type { Exercise } from "@/content/types";
+import { markLessonReadAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +34,7 @@ export default async function SkillPage({
   const status = getSkillStatus(skill, levels);
   const unlocked = isSkillUnlocked(skill, levels);
   const currentLevel = getLevel(levels, skill.id);
+  const activityState = unlocked ? await getSkillActivityState(skill.id) : null;
 
   return (
     <div className="flex flex-col gap-8">
@@ -53,7 +58,7 @@ export default async function SkillPage({
         <p className="text-sm text-muted">{skill.description}</p>
       </header>
 
-      {!unlocked ? (
+      {!unlocked || !activityState ? (
         <LockedNotice prerequisites={skill.prerequisites} />
       ) : (
         <>
@@ -63,17 +68,36 @@ export default async function SkillPage({
           />
 
           <section className="flex flex-col gap-6">
-            {getLessonsBySkill(skill.id).map((lesson) => (
-              <article
-                key={lesson.id}
-                className="rounded-xl border border-border bg-surface p-6"
-              >
-                <h2 className="text-lg font-semibold">{lesson.title}</h2>
-                <div className="prose-academy mt-4">
-                  <ReactMarkdown>{lesson.body}</ReactMarkdown>
-                </div>
-              </article>
-            ))}
+            {getLessonsBySkill(skill.id).map((lesson) => {
+              const isRead = activityState.readLessonIds.has(lesson.id);
+              return (
+                <article
+                  key={lesson.id}
+                  className="rounded-xl border border-border bg-surface p-6"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <h2 className="text-lg font-semibold">{lesson.title}</h2>
+                    {isRead ? (
+                      <span className="shrink-0 rounded-full bg-success/15 px-2.5 py-1 text-xs text-success">
+                        Lue
+                      </span>
+                    ) : (
+                      <form action={markLessonReadAction.bind(null, skill.id, lesson.id)}>
+                        <button
+                          type="submit"
+                          className="shrink-0 rounded-md border border-border px-3 py-1.5 text-xs text-foreground hover:bg-surface-hover"
+                        >
+                          Marquer comme lue
+                        </button>
+                      </form>
+                    )}
+                  </div>
+                  <div className="prose-academy mt-4">
+                    <ReactMarkdown>{lesson.body}</ReactMarkdown>
+                  </div>
+                </article>
+              );
+            })}
           </section>
 
           <section className="flex flex-col gap-4">
@@ -81,7 +105,42 @@ export default async function SkillPage({
               Exercices
             </h2>
             {getExercisesBySkill(skill.id).map((exercise) => (
-              <ExerciseCard key={exercise.id} exercise={exercise} />
+              <ExerciseShell key={exercise.id} exercise={exercise}>
+                {exercise.type === "quiz" && (
+                  <QuizRunner
+                    skillId={skill.id}
+                    exercise={exercise}
+                    initialBest={activityState.quizBestByExercise.get(exercise.id)}
+                  />
+                )}
+                {exercise.type === "guided" && (
+                  <GuidedExerciseRunner
+                    skillId={skill.id}
+                    exercise={exercise}
+                    initialContent={
+                      activityState.submissionByExercise.get(exercise.id)?.content ?? null
+                    }
+                    initialStatus={
+                      activityState.submissionByExercise.get(exercise.id)?.status ?? null
+                    }
+                  />
+                )}
+                {(exercise.type === "autonomous" || exercise.type === "challenge") && (
+                  <CriteriaExerciseRunner
+                    skillId={skill.id}
+                    exercise={exercise}
+                    initialContent={
+                      activityState.submissionByExercise.get(exercise.id)?.content ?? null
+                    }
+                    initialCriteriaResults={
+                      activityState.submissionByExercise.get(exercise.id)?.criteriaResults ?? null
+                    }
+                    initialStatus={
+                      activityState.submissionByExercise.get(exercise.id)?.status ?? null
+                    }
+                  />
+                )}
+              </ExerciseShell>
             ))}
           </section>
         </>
@@ -162,7 +221,13 @@ function LevelLadder({
   );
 }
 
-function ExerciseCard({ exercise }: { exercise: Exercise }) {
+function ExerciseShell({
+  exercise,
+  children,
+}: {
+  exercise: Exercise;
+  children: React.ReactNode;
+}) {
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <div className="flex items-center justify-between">
@@ -172,28 +237,7 @@ function ExerciseCard({ exercise }: { exercise: Exercise }) {
         </span>
       </div>
       <p className="mt-2 text-sm text-muted">{exercise.instructions}</p>
-
-      {exercise.type === "guided" && (
-        <ol className="mt-3 flex list-decimal flex-col gap-1 pl-5 text-sm text-muted">
-          {exercise.steps.map((step) => (
-            <li key={step.id}>{step.prompt}</li>
-          ))}
-        </ol>
-      )}
-
-      {exercise.type === "quiz" && (
-        <p className="mt-3 text-xs text-muted">
-          {exercise.questions.length} question(s) · seuil de réussite {exercise.passingScore}%
-        </p>
-      )}
-
-      {(exercise.type === "autonomous" || exercise.type === "challenge") && (
-        <ul className="mt-3 flex list-disc flex-col gap-1 pl-5 text-sm text-muted">
-          {exercise.criteria.map((criterion) => (
-            <li key={criterion.id}>{criterion.description}</li>
-          ))}
-        </ul>
-      )}
+      {children}
     </div>
   );
 }
