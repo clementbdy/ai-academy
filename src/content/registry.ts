@@ -14,26 +14,44 @@ import { contextEngineeringModules } from "@/content/domains/context-engineering
 import { contextEngineeringSkills } from "@/content/domains/context-engineering/skills";
 import { contextEngineeringLessons } from "@/content/domains/context-engineering/lessons";
 import { contextEngineeringExercises } from "@/content/domains/context-engineering/exercises";
+import { assistantsIaDomain } from "@/content/domains/assistants-ia/domain";
+import { assistantsIaModules } from "@/content/domains/assistants-ia/modules";
+import { assistantsIaSkills } from "@/content/domains/assistants-ia/skills";
+import { assistantsIaLessons } from "@/content/domains/assistants-ia/lessons";
+import { assistantsIaExercises } from "@/content/domains/assistants-ia/exercises";
 import { tools as toolEntries } from "@/content/tools";
 import { projects as projectEntries } from "@/content/projects";
 
 // Chaque nouveau domaine s'ajoute ici — une seule liste à étendre.
-export const domains: Domain[] = [fondationsIaDomain, promptEngineeringDomain, contextEngineeringDomain];
+export const domains: Domain[] = [
+  fondationsIaDomain,
+  promptEngineeringDomain,
+  contextEngineeringDomain,
+  assistantsIaDomain,
+];
 export const modules: Module[] = [
   ...fondationsIaModules,
   ...promptEngineeringModules,
   ...contextEngineeringModules,
+  ...assistantsIaModules,
 ];
-export const skills: Skill[] = [...fondationsIaSkills, ...promptEngineeringSkills, ...contextEngineeringSkills];
+export const skills: Skill[] = [
+  ...fondationsIaSkills,
+  ...promptEngineeringSkills,
+  ...contextEngineeringSkills,
+  ...assistantsIaSkills,
+];
 export const lessons: Lesson[] = [
   ...fondationsIaLessons,
   ...promptEngineeringLessons,
   ...contextEngineeringLessons,
+  ...assistantsIaLessons,
 ];
 export const exercises: Exercise[] = [
   ...fondationsIaExercises,
   ...promptEngineeringExercises,
   ...contextEngineeringExercises,
+  ...assistantsIaExercises,
 ];
 export const tools: ToolEntry[] = [...toolEntries];
 export const projects: Project[] = [...projectEntries];
