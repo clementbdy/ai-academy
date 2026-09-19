@@ -99,3 +99,23 @@ export type Exercise =
   | AutonomousExercise
   | QuizExercise
   | ChallengeExercise;
+
+export type ToolLevel = "débutant" | "intermédiaire" | "avancé";
+export type ToolPricing = "gratuit" | "freemium" | "payant";
+
+export interface ToolEntry {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  useCases: string[];
+  level: ToolLevel;
+  pricing: ToolPricing;
+  /** Description qualitative plutôt que des tarifs précis, qui datent vite. */
+  pricingNote: string;
+  /** Noms d'outils comparables (texte libre, pas des IDs — la Toolbox n'a pas
+   * vocation à référencer exhaustivement chaque alternative). */
+  alternatives: string[];
+  limitations: string;
+  tutorialUrl?: string;
+}

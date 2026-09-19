@@ -4,6 +4,7 @@ import {
   skills,
   lessons,
   exercises,
+  tools,
   domainById,
   moduleById,
   skillById,
@@ -24,6 +25,7 @@ function checkDuplicateIds(): ContentIssue[] {
     ...skills.map((s) => ({ id: s.id, scope: "skill" })),
     ...lessons.map((l) => ({ id: l.id, scope: "lesson" })),
     ...exercises.map((e) => ({ id: e.id, scope: "exercise" })),
+    ...tools.map((t) => ({ id: t.id, scope: "tool" })),
   ];
 
   for (const entity of allEntities) {

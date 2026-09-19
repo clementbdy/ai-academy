@@ -8,6 +8,9 @@ const navItems = [
   { href: "/formation", label: "Formation" },
   { href: "/competences", label: "Compétences" },
   { href: "/progression", label: "Progression" },
+  { href: "/lab", label: "AI Lab" },
+  { href: "/outils", label: "AI Toolbox" },
+  { href: "/notes", label: "Notes" },
 ];
 
 export function Sidebar() {

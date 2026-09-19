@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { prisma } from "@/lib/db";
 import { getLevelMap } from "@/lib/skill-progress";
 import { getGlobalStats, getNextRecommendedSkill } from "@/lib/progress";
 import { moduleById, domainById } from "@/content/registry";
@@ -9,7 +10,12 @@ import { ProgressBar } from "@/components/ProgressBar";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const levels = await getLevelMap();
+  const [levels, promptCount, favoriteToolCount, noteCount] = await Promise.all([
+    getLevelMap(),
+    prisma.savedPrompt.count(),
+    prisma.toolFavorite.count(),
+    prisma.note.count(),
+  ]);
   const stats = getGlobalStats(levels);
   const nextSkill = getNextRecommendedSkill(levels);
   const nextModule = nextSkill ? moduleById.get(nextSkill.moduleId) : undefined;
@@ -76,12 +82,35 @@ export default async function DashboardPage() {
         </p>
       </section>
 
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-muted">
+          Outils & ressources
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <QuickLinkCard href="/lab" label="Prompts sauvegardés" value={String(promptCount)} />
+          <QuickLinkCard href="/outils" label="Outils favoris" value={String(favoriteToolCount)} />
+          <QuickLinkCard href="/notes" label="Notes" value={String(noteCount)} />
+        </div>
+      </section>
+
       <div>
         <Link href="/formation" className="text-sm font-medium text-accent hover:underline">
           Parcourir la formation →
         </Link>
       </div>
     </div>
+  );
+}
+
+function QuickLinkCard({ href, label, value }: { href: string; label: string; value: string }) {
+  return (
+    <Link
+      href={href}
+      className="rounded-xl border border-border bg-surface p-5 transition-colors hover:bg-surface-hover"
+    >
+      <p className="text-xs text-muted">{label}</p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </Link>
   );
 }
 
