@@ -1,20 +1,5 @@
-import type { LevelDescriptor, Skill } from "@/content/types";
-
-function descriptors(
-  topic: string,
-  use: string,
-  master: string,
-  expert: string,
-): LevelDescriptor[] {
-  return [
-    { level: 0, label: "Non découvert", description: `N'a pas encore abordé ${topic}.` },
-    { level: 1, label: "Découverte", description: `Reconnaît le vocabulaire de base autour de ${topic}.` },
-    { level: 2, label: "Compréhension", description: `Peut expliquer ${topic} avec ses propres mots, sans jargon.` },
-    { level: 3, label: "Utilisation", description: use },
-    { level: 4, label: "Maîtrise", description: master },
-    { level: 5, label: "Expertise pratique", description: expert },
-  ];
-}
+import type { Skill } from "@/content/types";
+import { levelDescriptors as descriptors } from "@/content/level-descriptors";
 
 export const fondationsIaSkills: Skill[] = [
   {

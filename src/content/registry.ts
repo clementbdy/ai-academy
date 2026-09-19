@@ -4,15 +4,20 @@ import { fondationsIaModules } from "@/content/domains/fondations-ia/modules";
 import { fondationsIaSkills } from "@/content/domains/fondations-ia/skills";
 import { fondationsIaLessons } from "@/content/domains/fondations-ia/lessons";
 import { fondationsIaExercises } from "@/content/domains/fondations-ia/exercises";
+import { promptEngineeringDomain } from "@/content/domains/prompt-engineering/domain";
+import { promptEngineeringModules } from "@/content/domains/prompt-engineering/modules";
+import { promptEngineeringSkills } from "@/content/domains/prompt-engineering/skills";
+import { promptEngineeringLessons } from "@/content/domains/prompt-engineering/lessons";
+import { promptEngineeringExercises } from "@/content/domains/prompt-engineering/exercises";
 import { tools as toolEntries } from "@/content/tools";
 import { projects as projectEntries } from "@/content/projects";
 
 // Chaque nouveau domaine s'ajoute ici — une seule liste à étendre.
-export const domains: Domain[] = [fondationsIaDomain];
-export const modules: Module[] = [...fondationsIaModules];
-export const skills: Skill[] = [...fondationsIaSkills];
-export const lessons: Lesson[] = [...fondationsIaLessons];
-export const exercises: Exercise[] = [...fondationsIaExercises];
+export const domains: Domain[] = [fondationsIaDomain, promptEngineeringDomain];
+export const modules: Module[] = [...fondationsIaModules, ...promptEngineeringModules];
+export const skills: Skill[] = [...fondationsIaSkills, ...promptEngineeringSkills];
+export const lessons: Lesson[] = [...fondationsIaLessons, ...promptEngineeringLessons];
+export const exercises: Exercise[] = [...fondationsIaExercises, ...promptEngineeringExercises];
 export const tools: ToolEntry[] = [...toolEntries];
 export const projects: Project[] = [...projectEntries];
 
