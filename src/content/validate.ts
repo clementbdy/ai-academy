@@ -5,6 +5,7 @@ import {
   lessons,
   exercises,
   tools,
+  projects,
   domainById,
   moduleById,
   skillById,
@@ -26,6 +27,7 @@ function checkDuplicateIds(): ContentIssue[] {
     ...lessons.map((l) => ({ id: l.id, scope: "lesson" })),
     ...exercises.map((e) => ({ id: e.id, scope: "exercise" })),
     ...tools.map((t) => ({ id: t.id, scope: "tool" })),
+    ...projects.map((p) => ({ id: p.id, scope: "project" })),
   ];
 
   for (const entity of allEntities) {
@@ -242,6 +244,27 @@ function checkLevelDescriptors(): ContentIssue[] {
   return issues;
 }
 
+function checkProjectRefs(): ContentIssue[] {
+  const issues: ContentIssue[] = [];
+  for (const project of projects) {
+    if (project.criteria.length === 0) {
+      issues.push({
+        scope: "project",
+        message: `Projet "${project.id}" n'a aucun critère de validation`,
+      });
+    }
+    for (const skillId of [...project.requiredSkillIds, ...project.skillsDeveloped]) {
+      if (!skillById.has(skillId)) {
+        issues.push({
+          scope: "project",
+          message: `Projet "${project.id}" référence une compétence inexistante : "${skillId}"`,
+        });
+      }
+    }
+  }
+  return issues;
+}
+
 export function validateContent(): ContentIssue[] {
   return [
     ...checkDuplicateIds(),
@@ -253,5 +276,6 @@ export function validateContent(): ContentIssue[] {
     ...checkPrerequisiteCycles(),
     ...checkLessonExerciseRefs(),
     ...checkLevelDescriptors(),
+    ...checkProjectRefs(),
   ];
 }

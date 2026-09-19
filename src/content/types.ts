@@ -119,3 +119,19 @@ export interface ToolEntry {
   limitations: string;
   tutorialUrl?: string;
 }
+
+export type ProjectDifficulty = "débutant" | "intermédiaire" | "avancé" | "expert";
+
+export interface Project {
+  id: string;
+  title: string;
+  difficulty: ProjectDifficulty;
+  description: string;
+  /** Markdown. */
+  instructions: string;
+  /** Compétences requises au niveau >= 3 (Utilisation) pour débloquer le projet. */
+  requiredSkillIds: string[];
+  /** Compétences que ce projet fait pratiquer (affiché, pas utilisé pour le déblocage). */
+  skillsDeveloped: string[];
+  criteria: ValidationCriterion[];
+}

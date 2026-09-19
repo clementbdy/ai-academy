@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/db";
 import { recomputeSkillLevel } from "@/lib/evaluation";
 import { exerciseById } from "@/content/registry";
+import type { CriterionResult } from "@/lib/criteria";
 
 function revalidateAfterProgress(skillId: string) {
   revalidatePath("/");
@@ -106,11 +107,6 @@ export async function submitGuidedExerciseAction(
   revalidateAfterProgress(skillId);
 
   return { status };
-}
-
-export interface CriterionResult {
-  criterionId: string;
-  met: boolean;
 }
 
 export async function submitCriteriaExerciseAction(

@@ -15,7 +15,7 @@ import { QuizRunner } from "@/components/QuizRunner";
 import { GuidedExerciseRunner } from "@/components/GuidedExerciseRunner";
 import { CriteriaExerciseRunner } from "@/components/CriteriaExerciseRunner";
 import type { Exercise } from "@/content/types";
-import { markLessonReadAction } from "./actions";
+import { markLessonReadAction, submitCriteriaExerciseAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -127,8 +127,7 @@ export default async function SkillPage({
                 )}
                 {(exercise.type === "autonomous" || exercise.type === "challenge") && (
                   <CriteriaExerciseRunner
-                    skillId={skill.id}
-                    exercise={exercise}
+                    criteria={exercise.criteria}
                     initialContent={
                       activityState.submissionByExercise.get(exercise.id)?.content ?? null
                     }
@@ -138,6 +137,7 @@ export default async function SkillPage({
                     initialStatus={
                       activityState.submissionByExercise.get(exercise.id)?.status ?? null
                     }
+                    onSubmit={submitCriteriaExerciseAction.bind(null, skill.id, exercise.id)}
                   />
                 )}
               </ExerciseShell>

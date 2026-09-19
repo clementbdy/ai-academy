@@ -2,7 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { getLevelMap } from "@/lib/skill-progress";
 import { getGlobalStats, getNextRecommendedSkill } from "@/lib/progress";
-import { moduleById, domainById } from "@/content/registry";
+import { isProjectUnlocked } from "@/lib/project-progress";
+import { moduleById, domainById, projects } from "@/content/registry";
 import { ProgressBar } from "@/components/ProgressBar";
 
 // Cette page lit la progression en base à chaque visite : elle ne doit pas
@@ -10,11 +11,12 @@ import { ProgressBar } from "@/components/ProgressBar";
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [levels, promptCount, favoriteToolCount, noteCount] = await Promise.all([
+  const [levels, promptCount, favoriteToolCount, noteCount, projectSubmissions] = await Promise.all([
     getLevelMap(),
     prisma.savedPrompt.count(),
     prisma.toolFavorite.count(),
     prisma.note.count(),
+    prisma.projectSubmission.findMany(),
   ]);
   const stats = getGlobalStats(levels);
   const nextSkill = getNextRecommendedSkill(levels);
@@ -22,6 +24,13 @@ export default async function DashboardPage() {
   const nextDomain = nextModule ? domainById.get(nextModule.domainId) : undefined;
   const masteredPct =
     stats.totalSkills === 0 ? 0 : Math.round((stats.masteredSkills / stats.totalSkills) * 100);
+
+  const validatedProjectIds = new Set(
+    projectSubmissions.filter((s) => s.status === "validated").map((s) => s.projectId),
+  );
+  const nextProject = nextSkill
+    ? undefined
+    : projects.find((p) => isProjectUnlocked(p, levels) && !validatedProjectIds.has(p.id));
 
   return (
     <div className="flex flex-col gap-10">
@@ -54,9 +63,23 @@ export default async function DashboardPage() {
               </Link>
             </div>
           </div>
+        ) : nextProject ? (
+          <div className="mt-3 flex flex-col gap-3">
+            <p className="text-xs text-muted">Projet — {nextProject.difficulty}</p>
+            <h2 className="text-xl font-medium">{nextProject.title}</h2>
+            <p className="text-sm text-muted">{nextProject.description}</p>
+            <div>
+              <Link
+                href={`/projets/${nextProject.id}`}
+                className="inline-flex items-center rounded-md bg-accent px-4 py-2 text-sm font-medium text-accent-foreground transition-opacity hover:opacity-90"
+              >
+                Faire ce projet
+              </Link>
+            </div>
+          </div>
         ) : (
           <p className="mt-3 text-sm text-muted">
-            Toutes les compétences actuellement disponibles sont maîtrisées. De nouveaux
+            Toutes les compétences et projets actuellement disponibles sont validés. De nouveaux
             domaines arriveront au fil des prochaines phases.
           </p>
         )}
