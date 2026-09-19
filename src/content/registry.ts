@@ -1,58 +1,26 @@
-import type { Domain, Exercise, Lesson, Module, Project, Skill, ToolEntry } from "@/content/types";
-import { fondationsIaDomain } from "@/content/domains/fondations-ia/domain";
-import { fondationsIaModules } from "@/content/domains/fondations-ia/modules";
-import { fondationsIaSkills } from "@/content/domains/fondations-ia/skills";
-import { fondationsIaLessons } from "@/content/domains/fondations-ia/lessons";
-import { fondationsIaExercises } from "@/content/domains/fondations-ia/exercises";
-import { promptEngineeringDomain } from "@/content/domains/prompt-engineering/domain";
-import { promptEngineeringModules } from "@/content/domains/prompt-engineering/modules";
-import { promptEngineeringSkills } from "@/content/domains/prompt-engineering/skills";
-import { promptEngineeringLessons } from "@/content/domains/prompt-engineering/lessons";
-import { promptEngineeringExercises } from "@/content/domains/prompt-engineering/exercises";
-import { contextEngineeringDomain } from "@/content/domains/context-engineering/domain";
-import { contextEngineeringModules } from "@/content/domains/context-engineering/modules";
-import { contextEngineeringSkills } from "@/content/domains/context-engineering/skills";
-import { contextEngineeringLessons } from "@/content/domains/context-engineering/lessons";
-import { contextEngineeringExercises } from "@/content/domains/context-engineering/exercises";
-import { assistantsIaDomain } from "@/content/domains/assistants-ia/domain";
-import { assistantsIaModules } from "@/content/domains/assistants-ia/modules";
-import { assistantsIaSkills } from "@/content/domains/assistants-ia/skills";
-import { assistantsIaLessons } from "@/content/domains/assistants-ia/lessons";
-import { assistantsIaExercises } from "@/content/domains/assistants-ia/exercises";
+import type { DomainBundle, Domain, Exercise, Lesson, Module, Project, Skill, ToolEntry } from "@/content/types";
+import { fondationsIaBundle } from "@/content/domains/fondations-ia";
+import { promptEngineeringBundle } from "@/content/domains/prompt-engineering";
+import { contextEngineeringBundle } from "@/content/domains/context-engineering";
+import { assistantsIaBundle } from "@/content/domains/assistants-ia";
+import { automatisationBundle } from "@/content/domains/automatisation";
 import { tools as toolEntries } from "@/content/tools";
 import { projects as projectEntries } from "@/content/projects";
 
-// Chaque nouveau domaine s'ajoute ici — une seule liste à étendre.
-export const domains: Domain[] = [
-  fondationsIaDomain,
-  promptEngineeringDomain,
-  contextEngineeringDomain,
-  assistantsIaDomain,
+// Chaque nouveau domaine s'ajoute ici — une seule ligne à ajouter.
+const domainBundles: DomainBundle[] = [
+  fondationsIaBundle,
+  promptEngineeringBundle,
+  contextEngineeringBundle,
+  assistantsIaBundle,
+  automatisationBundle,
 ];
-export const modules: Module[] = [
-  ...fondationsIaModules,
-  ...promptEngineeringModules,
-  ...contextEngineeringModules,
-  ...assistantsIaModules,
-];
-export const skills: Skill[] = [
-  ...fondationsIaSkills,
-  ...promptEngineeringSkills,
-  ...contextEngineeringSkills,
-  ...assistantsIaSkills,
-];
-export const lessons: Lesson[] = [
-  ...fondationsIaLessons,
-  ...promptEngineeringLessons,
-  ...contextEngineeringLessons,
-  ...assistantsIaLessons,
-];
-export const exercises: Exercise[] = [
-  ...fondationsIaExercises,
-  ...promptEngineeringExercises,
-  ...contextEngineeringExercises,
-  ...assistantsIaExercises,
-];
+
+export const domains: Domain[] = domainBundles.map((b) => b.domain);
+export const modules: Module[] = domainBundles.flatMap((b) => b.modules);
+export const skills: Skill[] = domainBundles.flatMap((b) => b.skills);
+export const lessons: Lesson[] = domainBundles.flatMap((b) => b.lessons);
+export const exercises: Exercise[] = domainBundles.flatMap((b) => b.exercises);
 export const tools: ToolEntry[] = [...toolEntries];
 export const projects: Project[] = [...projectEntries];
 

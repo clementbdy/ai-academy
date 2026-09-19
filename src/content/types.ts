@@ -4,6 +4,16 @@
 
 export type SkillLevel = 0 | 1 | 2 | 3 | 4 | 5;
 
+/** Regroupe tout le contenu d'un domaine — un seul objet à exporter par
+ * dossier de domaine, pour que le registre n'ait qu'une ligne à ajouter. */
+export interface DomainBundle {
+  domain: Domain;
+  modules: Module[];
+  skills: Skill[];
+  lessons: Lesson[];
+  exercises: Exercise[];
+}
+
 export interface LevelDescriptor {
   level: SkillLevel;
   label: string;
