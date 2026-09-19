@@ -12,4 +12,102 @@ datasource db {
   provider = "sqlite"
 }
 
-// Le schéma métier (Domain/Module/Skill/Progress/...) sera défini en Phase 1.
+// Le contenu pédagogique (Domain/Module/Skill/Lesson/Exercise/Project/Tool)
+// est statique et versionné dans src/content/ — pas en base.
+// Seules les données utilisateur (progression, soumissions, notes...) sont
+// persistées ici. Les champs skillId/exerciseId/projectId ci-dessous sont
+// des identifiants texte qui pointent vers ce contenu statique, sans clé
+// étrangère au niveau de la base (les deux couches sont indépendantes).
+
+model SkillProgress {
+  id        String   @id @default(cuid())
+  skillId   String   @unique
+  level     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ActivityLog {
+  id           String   @id @default(cuid())
+  skillId      String
+  activityId   String
+  activityType String
+  result       String?
+  timeSpentSec Int?
+  completedAt  DateTime @default(now())
+
+  @@index([skillId])
+  @@index([activityId])
+}
+
+model ExerciseSubmission {
+  id              String   @id @default(cuid())
+  exerciseId      String
+  skillId         String
+  content         String
+  status          String   @default("draft")
+  criteriaResults String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([exerciseId])
+  @@index([skillId])
+}
+
+model ProjectSubmission {
+  id              String   @id @default(cuid())
+  projectId       String
+  content         String
+  status          String   @default("draft")
+  criteriaResults String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([projectId])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  tags      String?
+  skillId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SavedPrompt {
+  id        String   @id @default(cuid())
+  title     String
+  prompt    String
+  notes     String?
+  tags      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Workflow {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  steps       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ToolFavorite {
+  id        String   @id @default(cuid())
+  toolId    String   @unique
+  note      String?
+  createdAt DateTime @default(now())
+}
+
+model Objective {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  targetDate  DateTime?
+  status      String    @default("active")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
