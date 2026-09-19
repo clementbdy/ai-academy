@@ -9,6 +9,7 @@ import { agentsIaBundle } from "@/content/domains/agents-ia";
 import { productiviteBundle } from "@/content/domains/productivite";
 import { creationBundle } from "@/content/domains/creation";
 import { ragBundle } from "@/content/domains/rag";
+import { systemesIaBundle } from "@/content/domains/systemes-ia";
 import { tools as toolEntries } from "@/content/tools";
 import { projects as projectEntries } from "@/content/projects";
 
@@ -24,6 +25,7 @@ const domainBundles: DomainBundle[] = [
   productiviteBundle,
   creationBundle,
   ragBundle,
+  systemesIaBundle,
 ];
 
 export const domains: Domain[] = domainBundles.map((b) => b.domain);
