@@ -4,6 +4,7 @@ import { promptEngineeringBundle } from "@/content/domains/prompt-engineering";
 import { contextEngineeringBundle } from "@/content/domains/context-engineering";
 import { assistantsIaBundle } from "@/content/domains/assistants-ia";
 import { automatisationBundle } from "@/content/domains/automatisation";
+import { programmationAssisteeBundle } from "@/content/domains/programmation-assistee";
 import { tools as toolEntries } from "@/content/tools";
 import { projects as projectEntries } from "@/content/projects";
 
@@ -14,6 +15,7 @@ const domainBundles: DomainBundle[] = [
   contextEngineeringBundle,
   assistantsIaBundle,
   automatisationBundle,
+  programmationAssisteeBundle,
 ];
 
 export const domains: Domain[] = domainBundles.map((b) => b.domain);
