@@ -10,11 +10,13 @@
     "validate:content": "tsx scripts/validate-content.ts"
   },
   "dependencies": {
+    "@prisma/adapter-better-sqlite3": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "dotenv": "^18.0.1",
     "next": "16.3.5",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
