@@ -12,6 +12,7 @@ const navItems = [
   { href: "/lab", label: "AI Lab" },
   { href: "/outils", label: "AI Toolbox" },
   { href: "/notes", label: "Notes" },
+  { href: "/coach", label: "Coach IA" },
 ];
 
 export function Sidebar() {
