@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { ValidationCriterion } from "@/content/types";
 import { initialCriteriaState, type CriterionResult } from "@/lib/criteria";
+import { useElapsedSeconds } from "@/lib/use-elapsed-seconds";
 
 const MIN_CONTENT_LENGTH = 30;
 
@@ -22,7 +23,11 @@ export function CriteriaExerciseRunner({
   initialStatus: string | null;
   placeholder?: string;
   submitLabel?: string;
-  onSubmit: (content: string, criteria: CriterionResult[]) => Promise<{ status: string }>;
+  onSubmit: (
+    content: string,
+    criteria: CriterionResult[],
+    timeSpentSec: number,
+  ) => Promise<{ status: string }>;
 }) {
   const router = useRouter();
   const [content, setContent] = useState(initialContent ?? "");
@@ -31,6 +36,7 @@ export function CriteriaExerciseRunner({
   );
   const [status, setStatus] = useState<string | null>(initialStatus);
   const [isPending, startTransition] = useTransition();
+  const getElapsedSeconds = useElapsedSeconds();
 
   const canSubmit = content.trim().length >= MIN_CONTENT_LENGTH;
 
@@ -40,7 +46,7 @@ export function CriteriaExerciseRunner({
         criterionId: c.id,
         met: criteriaState[c.id] ?? false,
       }));
-      const res = await onSubmit(content, payload);
+      const res = await onSubmit(content, payload, getElapsedSeconds());
       setStatus(res.status);
       router.refresh();
     });

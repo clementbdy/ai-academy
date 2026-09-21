@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { QuizExercise } from "@/content/types";
 import { submitQuizAction, type QuizResult } from "@/app/formation/[skillId]/actions";
 import type { QuizBestResult } from "@/lib/skill-progress";
+import { useElapsedSeconds } from "@/lib/use-elapsed-seconds";
 
 export function QuizRunner({
   skillId,
@@ -20,6 +21,7 @@ export function QuizRunner({
   const [result, setResult] = useState<QuizResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const getElapsedSeconds = useElapsedSeconds();
 
   const allAnswered = exercise.questions.every((q) => answers[q.id] !== undefined);
 
@@ -27,7 +29,7 @@ export function QuizRunner({
     setError(null);
     startTransition(async () => {
       try {
-        const res = await submitQuizAction(skillId, exercise.id, answers);
+        const res = await submitQuizAction(skillId, exercise.id, answers, getElapsedSeconds());
         setResult(res);
         router.refresh();
       } catch {

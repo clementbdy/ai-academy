@@ -14,8 +14,9 @@ import { SkillStatusBadge } from "@/components/SkillStatusBadge";
 import { QuizRunner } from "@/components/QuizRunner";
 import { GuidedExerciseRunner } from "@/components/GuidedExerciseRunner";
 import { CriteriaExerciseRunner } from "@/components/CriteriaExerciseRunner";
+import { MarkLessonReadButton } from "@/components/MarkLessonReadButton";
 import type { Exercise } from "@/content/types";
-import { markLessonReadAction, submitCriteriaExerciseAction } from "./actions";
+import { submitCriteriaExerciseAction } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -82,14 +83,7 @@ export default async function SkillPage({
                         Lue
                       </span>
                     ) : (
-                      <form action={markLessonReadAction.bind(null, skill.id, lesson.id)}>
-                        <button
-                          type="submit"
-                          className="shrink-0 rounded-md border border-border px-3 py-1.5 text-xs text-foreground hover:bg-surface-hover"
-                        >
-                          Marquer comme lue
-                        </button>
-                      </form>
+                      <MarkLessonReadButton skillId={skill.id} lessonId={lesson.id} />
                     )}
                   </div>
                   <div className="prose-academy mt-4">

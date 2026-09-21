@@ -12,13 +12,17 @@ function revalidateAfterProgress(skillId: string) {
   revalidatePath(`/formation/${skillId}`);
 }
 
-export async function markLessonReadAction(skillId: string, lessonId: string): Promise<void> {
+export async function markLessonReadAction(
+  skillId: string,
+  lessonId: string,
+  timeSpentSec: number,
+): Promise<void> {
   const existing = await prisma.activityLog.findFirst({
     where: { skillId, activityType: "lesson", activityId: lessonId },
   });
   if (!existing) {
     await prisma.activityLog.create({
-      data: { skillId, activityType: "lesson", activityId: lessonId, result: "read" },
+      data: { skillId, activityType: "lesson", activityId: lessonId, result: "read", timeSpentSec },
     });
   }
   await recomputeSkillLevel(skillId);
@@ -37,6 +41,7 @@ export async function submitQuizAction(
   skillId: string,
   exerciseId: string,
   answers: Record<string, number>,
+  timeSpentSec: number,
 ): Promise<QuizResult> {
   const exercise = exerciseById.get(exerciseId);
   if (!exercise || exercise.type !== "quiz" || exercise.skillId !== skillId) {
@@ -60,6 +65,7 @@ export async function submitQuizAction(
       activityType: "quiz",
       activityId: exerciseId,
       result: JSON.stringify({ score, passed }),
+      timeSpentSec,
     },
   });
 
@@ -79,6 +85,7 @@ export async function submitGuidedExerciseAction(
   skillId: string,
   exerciseId: string,
   steps: GuidedStepResult[],
+  timeSpentSec: number,
 ): Promise<{ status: string }> {
   const exercise = exerciseById.get(exerciseId);
   if (!exercise || exercise.type !== "guided" || exercise.skillId !== skillId) {
@@ -96,6 +103,7 @@ export async function submitGuidedExerciseAction(
     content: JSON.stringify(steps),
     status,
     criteriaResults: null,
+    timeSpentSec: (existing?.timeSpentSec ?? 0) + timeSpentSec,
   };
   if (existing) {
     await prisma.exerciseSubmission.update({ where: { id: existing.id }, data });
@@ -114,6 +122,7 @@ export async function submitCriteriaExerciseAction(
   exerciseId: string,
   content: string,
   criteria: CriterionResult[],
+  timeSpentSec: number,
 ): Promise<{ status: string }> {
   const exercise = exerciseById.get(exerciseId);
   if (
@@ -133,6 +142,7 @@ export async function submitCriteriaExerciseAction(
     content,
     status,
     criteriaResults: JSON.stringify(criteria),
+    timeSpentSec: (existing?.timeSpentSec ?? 0) + timeSpentSec,
   };
   if (existing) {
     await prisma.exerciseSubmission.update({ where: { id: existing.id }, data });

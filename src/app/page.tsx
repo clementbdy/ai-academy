@@ -10,6 +10,7 @@ import {
   getCompletedEstimatedMinutes,
   formatEstimatedMinutes,
 } from "@/lib/time-estimate";
+import { getRealTimeSpentSeconds } from "@/lib/time-tracking";
 
 // Cette page lit la progression en base à chaque visite : elle ne doit pas
 // être figée dans le shell statique généré au build.
@@ -18,15 +19,23 @@ export const dynamic = "force-dynamic";
 const dateFormatter = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
 export default async function DashboardPage() {
-  const [levels, promptCount, favoriteToolCount, noteCount, projectSubmissions, activeObjectives] =
-    await Promise.all([
-      getLevelMap(),
-      prisma.savedPrompt.count(),
-      prisma.toolFavorite.count(),
-      prisma.note.count(),
-      prisma.projectSubmission.findMany(),
-      prisma.objective.findMany({ where: { status: "active" } }),
-    ]);
+  const [
+    levels,
+    promptCount,
+    favoriteToolCount,
+    noteCount,
+    projectSubmissions,
+    activeObjectives,
+    realTimeSpentSec,
+  ] = await Promise.all([
+    getLevelMap(),
+    prisma.savedPrompt.count(),
+    prisma.toolFavorite.count(),
+    prisma.note.count(),
+    prisma.projectSubmission.findMany(),
+    prisma.objective.findMany({ where: { status: "active" } }),
+    getRealTimeSpentSeconds(),
+  ]);
 
   const nextObjective = [...activeObjectives].sort((a, b) => {
     if (!a.targetDate && !b.targetDate) return 0;
@@ -138,6 +147,14 @@ export default async function DashboardPage() {
           {formatEstimatedMinutes(doneMinutes)} sur {formatEstimatedMinutes(totalMinutes)} estimées
           — encore {formatEstimatedMinutes(remainingMinutes)} pour terminer tout le contenu
           actuellement publié (durées indicatives).
+        </p>
+        <p className="mt-2 text-xs text-muted">
+          Temps réellement enregistré :{" "}
+          <span className="text-foreground">
+            {formatEstimatedMinutes(Math.round(realTimeSpentSec / 60))}
+          </span>{" "}
+          (mesuré pendant que ce navigateur était ouvert sur une leçon ou un exercice — un onglet
+          resté ouvert sans activité n&apos;est pas compté au-delà de 2h par session).
         </p>
       </section>
 

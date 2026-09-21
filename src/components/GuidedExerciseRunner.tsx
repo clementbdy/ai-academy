@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { GuidedExercise } from "@/content/types";
 import { submitGuidedExerciseAction, type GuidedStepResult } from "@/app/formation/[skillId]/actions";
+import { useElapsedSeconds } from "@/lib/use-elapsed-seconds";
 
 interface StepState {
   answer: string;
@@ -53,6 +54,7 @@ export function GuidedExerciseRunner({
   );
   const [status, setStatus] = useState<string | null>(initialStatus);
   const [isPending, startTransition] = useTransition();
+  const getElapsedSeconds = useElapsedSeconds();
 
   const allAssessed = exercise.steps.every((s) => steps[s.id]?.selfAssessedCorrect !== null);
 
@@ -67,7 +69,7 @@ export function GuidedExerciseRunner({
         answer: steps[s.id]?.answer ?? "",
         selfAssessedCorrect: steps[s.id]?.selfAssessedCorrect ?? false,
       }));
-      const res = await submitGuidedExerciseAction(skillId, exercise.id, payload);
+      const res = await submitGuidedExerciseAction(skillId, exercise.id, payload, getElapsedSeconds());
       setStatus(res.status);
       router.refresh();
     });

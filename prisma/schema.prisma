@@ -47,6 +47,7 @@ model ExerciseSubmission {
   content         String
   status          String   @default("draft")
   criteriaResults String?
+  timeSpentSec    Int?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -60,6 +61,7 @@ model ProjectSubmission {
   content         String
   status          String   @default("draft")
   criteriaResults String?
+  timeSpentSec    Int?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
