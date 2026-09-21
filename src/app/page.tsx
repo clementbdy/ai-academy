@@ -7,7 +7,7 @@ import { moduleById, domainById, projects } from "@/content/registry";
 import { ProgressBar } from "@/components/ProgressBar";
 import {
   getTotalEstimatedMinutes,
-  getRemainingEstimatedMinutes,
+  getCompletedEstimatedMinutes,
   formatEstimatedMinutes,
 } from "@/lib/time-estimate";
 
@@ -31,8 +31,8 @@ export default async function DashboardPage() {
     stats.totalSkills === 0 ? 0 : Math.round((stats.masteredSkills / stats.totalSkills) * 100);
 
   const totalMinutes = getTotalEstimatedMinutes();
-  const remainingMinutes = getRemainingEstimatedMinutes(levels);
-  const doneMinutes = totalMinutes - remainingMinutes;
+  const doneMinutes = Math.min(getCompletedEstimatedMinutes(levels), totalMinutes);
+  const remainingMinutes = totalMinutes - doneMinutes;
   const timePct = totalMinutes === 0 ? 0 : Math.round((doneMinutes / totalMinutes) * 100);
 
   const validatedProjectIds = new Set(

@@ -50,16 +50,21 @@ export function getDomainEstimatedMinutes(domainId: string): number {
   );
 }
 
+/** Arrondi à la demi-heure la plus proche : le détail par compétence reste
+ * précis, mais un total affiché à la minute près donnerait une fausse
+ * impression de précision sur ce qui n'est qu'une estimation. */
 export function getTotalEstimatedMinutes(): number {
-  return skills.reduce((sum, skill) => sum + getSkillEstimatedMinutes(skill.id), 0);
+  const raw = skills.reduce((sum, skill) => sum + getSkillEstimatedMinutes(skill.id), 0);
+  return Math.round(raw / 30) * 30;
 }
 
-/** Temps estimé des compétences pas encore au niveau "Utilisation", où
- * qu'elles se trouvent dans le programme (verrouillées comprises, puisqu'il
- * faudra bien les faire un jour). */
-export function getRemainingEstimatedMinutes(levels: LevelMap): number {
+/** Temps estimé des compétences déjà au niveau "Utilisation". Sert de base
+ * pour dériver le temps restant à partir du total arrondi, plutôt que de
+ * calculer les deux séparément (ce qui pourrait afficher un restant
+ * supérieur au total à cause de l'arrondi). */
+export function getCompletedEstimatedMinutes(levels: LevelMap): number {
   return skills
-    .filter((skill) => getLevel(levels, skill.id) < MASTERY_THRESHOLD)
+    .filter((skill) => getLevel(levels, skill.id) >= MASTERY_THRESHOLD)
     .reduce((sum, skill) => sum + getSkillEstimatedMinutes(skill.id), 0);
 }
 
