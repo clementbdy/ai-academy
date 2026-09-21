@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { skills, tools } from "@/content/registry";
 
-export type SearchResultType = "note" | "prompt" | "workflow" | "tool" | "skill";
+export type SearchResultType = "note" | "prompt" | "workflow" | "tool" | "skill" | "objective";
 
 export interface SearchResult {
   type: SearchResultType;
@@ -16,6 +16,7 @@ const TYPE_LABELS: Record<SearchResultType, string> = {
   workflow: "Workflow",
   tool: "Outil",
   skill: "Compétence",
+  objective: "Objectif",
 };
 
 export { TYPE_LABELS };
@@ -29,7 +30,7 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
   const q = query.trim();
   if (!q) return [];
 
-  const [notes, prompts, workflows] = await Promise.all([
+  const [notes, prompts, workflows, objectives] = await Promise.all([
     prisma.note.findMany({
       where: { OR: [{ title: { contains: q } }, { content: { contains: q } }] },
       take: 10,
@@ -39,6 +40,10 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
       take: 10,
     }),
     prisma.workflow.findMany({
+      where: { OR: [{ title: { contains: q } }, { description: { contains: q } }] },
+      take: 10,
+    }),
+    prisma.objective.findMany({
       where: { OR: [{ title: { contains: q } }, { description: { contains: q } }] },
       take: 10,
     }),
@@ -68,6 +73,14 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
       title: workflow.title,
       snippet: snippet(workflow.description ?? ""),
       href: `/lab/workflows/${workflow.id}`,
+    });
+  }
+  for (const objective of objectives) {
+    results.push({
+      type: "objective",
+      title: objective.title,
+      snippet: snippet(objective.description ?? ""),
+      href: `/objectifs/${objective.id}`,
     });
   }
 

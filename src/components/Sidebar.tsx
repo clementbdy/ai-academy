@@ -19,6 +19,30 @@ const navItems = [
 
 const footerItems = [{ href: "/parametres", label: "Paramètres" }];
 
+function GlobalSearchForm() {
+  return (
+    <form action="/notes" method="GET" className="relative mb-4">
+      <button
+        type="submit"
+        aria-label="Lancer la recherche"
+        className="absolute left-2 top-1/2 -translate-y-1/2 text-muted hover:text-foreground"
+      >
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="6" cy="6" r="4.5" stroke="currentColor" strokeWidth="1.3" />
+          <path d="M9.5 9.5L13 13" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+        </svg>
+      </button>
+      <input
+        type="text"
+        name="q"
+        placeholder="Rechercher partout..."
+        aria-label="Recherche globale"
+        className="w-full rounded-md border border-border bg-background py-1.5 pl-8 pr-2 text-sm text-foreground placeholder:text-muted focus:border-accent focus:outline-none"
+      />
+    </form>
+  );
+}
+
 function NavLink({
   href,
   label,
@@ -61,6 +85,7 @@ export function Sidebar() {
 
   const links = (
     <>
+      <GlobalSearchForm />
       <nav className="flex flex-1 flex-col gap-1">
         {navItems.map((item) => (
           <NavLink
