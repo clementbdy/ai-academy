@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { skills, lessons, projects, skillById } from "@/content/registry";
 import { getLevelMap } from "@/lib/skill-progress";
-import { getSkillStatus, getLevel } from "@/lib/progress";
+import { getSkillStatus, getLevel, getNextRecommendedSkill } from "@/lib/progress";
 import { isProjectUnlocked } from "@/lib/project-progress";
 import { getRecentActivityFeed } from "@/lib/activity-feed";
 
@@ -16,8 +16,10 @@ const STATUS_LABELS: Record<string, string> = {
  * Assemble le contexte réel de l'utilisateur (compétences, projets, activité
  * récente, notes, contenu des leçons) en un system prompt. Reconstruit à
  * chaque message pour rester à jour avec la dernière action de l'utilisateur
- * — pas de cache, le volume de données reste modeste tant qu'un seul domaine
- * existe.
+ * — pas de cache. Le contenu détaillé des leçons est volontairement limité
+ * aux compétences "en cours" (voir plus bas) : avec 67+ leçons publiées,
+ * tout embarquer à chaque message ferait exploser le coût en tokens sans
+ * rapport avec ce que l'utilisateur travaille réellement.
  */
 export async function buildCoachSystemPrompt(): Promise<string> {
   const [levels, feed, notes, projectSubmissions, objectives] = await Promise.all([
@@ -58,10 +60,27 @@ export async function buildCoachSystemPrompt(): Promise<string> {
     return `- ${objective.title}${deadline}`;
   });
 
-  const lessonSections = lessons.map((lesson) => {
-    const skill = skillById.get(lesson.skillId);
-    return `### ${lesson.title} (compétence : ${skill?.title ?? lesson.skillId})\n${lesson.body}`;
-  });
+  // N'embarquer le contenu complet des leçons que pour les compétences
+  // réellement en cours d'apprentissage — pas tout le corpus publié. Avec
+  // 67+ leçons, envoyer l'intégralité à chaque message coûterait des
+  // dizaines de milliers de tokens par échange, pour un usage qui ne
+  // dépasse jamais quelques compétences actives à la fois. Le statut de
+  // chaque compétence (verrouillée/à commencer/en cours/maîtrisée) reste
+  // listé plus haut pour le reste du programme.
+  let relevantSkillIds = new Set(
+    skills.filter((s) => getSkillStatus(s, levels) === "in_progress").map((s) => s.id),
+  );
+  if (relevantSkillIds.size === 0) {
+    const next = getNextRecommendedSkill(levels);
+    if (next) relevantSkillIds = new Set([next.id]);
+  }
+
+  const lessonSections = lessons
+    .filter((lesson) => relevantSkillIds.has(lesson.skillId))
+    .map((lesson) => {
+      const skill = skillById.get(lesson.skillId);
+      return `### ${lesson.title} (compétence : ${skill?.title ?? lesson.skillId})\n${lesson.body}`;
+    });
 
   return `Tu es le Coach IA de "AI Academy", l'école personnelle de l'intelligence artificielle de l'utilisateur. Réponds toujours en français, tutoiement, ton direct et bienveillant.
 
@@ -82,8 +101,10 @@ ${objectiveLines.join("\n") || "Aucun objectif fixé pour le moment."}
 ## Notes personnelles sauvegardées par l'utilisateur
 ${noteLines.join("\n") || "Aucune note pour le moment."}
 
-## Contenu des leçons déjà publiées (pour rester cohérent avec ce qui a été enseigné)
-${lessonSections.join("\n\n")}
+## Contenu détaillé des leçons actuellement en cours
+${lessonSections.join("\n\n") || "Aucune leçon en cours actuellement."}
+
+Le contenu détaillé ci-dessus ne couvre que les compétences au statut "en cours" (ou la prochaine recommandée si aucune n'est en cours) — pas l'intégralité du programme, pour rester léger. Pour toute autre compétence, tu ne connais que son titre, sa description et son statut (liste plus haut) : si l'utilisateur pose une question précise dessus, réponds avec ce que tu sais du sujet en général, mais invite-le à ouvrir la leçon correspondante dans Formation pour un contenu fidèle à ce qui y est réellement enseigné.
 
 Si on te demande "que dois-je apprendre maintenant ?", regarde les compétences non verrouillées dont le statut n'est pas "maîtrisée" et recommande la première dans l'ordre ci-dessus ; si toutes le sont, oriente vers un projet débloqué qui n'est pas encore validé.`;
 }
