@@ -96,7 +96,7 @@ async function ProjectSubmissionSection({
         initialContent={submission?.content ?? null}
         initialCriteriaResults={submission?.criteriaResults ?? null}
         initialStatus={submission?.status ?? null}
-        placeholder="Rédige ou colle ici ton document (les 3 tâches et leurs réponses aux 4 questions)..."
+        placeholder="Rédige ou colle ici ton livrable pour ce projet..."
         submitLabel="Valider le projet"
         onSubmit={submitProjectAction.bind(null, projectId)}
       />
