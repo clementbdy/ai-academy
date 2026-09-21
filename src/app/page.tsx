@@ -5,6 +5,11 @@ import { getGlobalStats, getNextRecommendedSkill } from "@/lib/progress";
 import { isProjectUnlocked } from "@/lib/project-progress";
 import { moduleById, domainById, projects } from "@/content/registry";
 import { ProgressBar } from "@/components/ProgressBar";
+import {
+  getTotalEstimatedMinutes,
+  getRemainingEstimatedMinutes,
+  formatEstimatedMinutes,
+} from "@/lib/time-estimate";
 
 // Cette page lit la progression en base à chaque visite : elle ne doit pas
 // être figée dans le shell statique généré au build.
@@ -24,6 +29,11 @@ export default async function DashboardPage() {
   const nextDomain = nextModule ? domainById.get(nextModule.domainId) : undefined;
   const masteredPct =
     stats.totalSkills === 0 ? 0 : Math.round((stats.masteredSkills / stats.totalSkills) * 100);
+
+  const totalMinutes = getTotalEstimatedMinutes();
+  const remainingMinutes = getRemainingEstimatedMinutes(levels);
+  const doneMinutes = totalMinutes - remainingMinutes;
+  const timePct = totalMinutes === 0 ? 0 : Math.round((doneMinutes / totalMinutes) * 100);
 
   const validatedProjectIds = new Set(
     projectSubmissions.filter((s) => s.status === "validated").map((s) => s.projectId),
@@ -102,6 +112,21 @@ export default async function DashboardPage() {
         <p className="mt-3 text-xs text-muted">
           Basé uniquement sur les compétences déjà publiées dans la formation ({stats.totalSkills} à ce
           stade). D&apos;autres domaines viendront enrichir ce total.
+        </p>
+      </section>
+
+      <section className="rounded-xl border border-border bg-surface p-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-medium">Temps de formation</h2>
+          <span className="text-sm text-muted">{timePct}%</span>
+        </div>
+        <div className="mt-3">
+          <ProgressBar value={timePct} />
+        </div>
+        <p className="mt-3 text-xs text-muted">
+          {formatEstimatedMinutes(doneMinutes)} sur {formatEstimatedMinutes(totalMinutes)} estimées
+          — encore {formatEstimatedMinutes(remainingMinutes)} pour terminer tout le contenu
+          actuellement publié (durées indicatives).
         </p>
       </section>
 

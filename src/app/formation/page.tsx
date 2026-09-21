@@ -3,11 +3,18 @@ import { domains, getModulesByDomain, getSkillsByModule } from "@/content/regist
 import { getLevelMap } from "@/lib/skill-progress";
 import { getSkillStatus } from "@/lib/progress";
 import { SkillStatusBadge } from "@/components/SkillStatusBadge";
+import {
+  getDomainEstimatedMinutes,
+  getModuleEstimatedMinutes,
+  getTotalEstimatedMinutes,
+  formatEstimatedMinutes,
+} from "@/lib/time-estimate";
 
 export const dynamic = "force-dynamic";
 
 export default async function FormationPage() {
   const levels = await getLevelMap();
+  const totalMinutes = getTotalEstimatedMinutes();
 
   return (
     <div className="flex flex-col gap-10">
@@ -16,18 +23,32 @@ export default async function FormationPage() {
         <p className="mt-1 text-sm text-muted">
           Le catalogue complet des domaines, modules et compétences disponibles.
         </p>
+        <p className="mt-2 text-xs text-muted">
+          Durée totale estimée du programme : {formatEstimatedMinutes(totalMinutes)} (indicatif,
+          basé sur le contenu des leçons et exercices)
+        </p>
       </header>
 
       {domains.map((domain) => (
         <section key={domain.id} className="flex flex-col gap-6">
           <div>
-            <h2 className="text-lg font-semibold">{domain.title}</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">{domain.title}</h2>
+              <span className="text-xs text-muted">
+                {formatEstimatedMinutes(getDomainEstimatedMinutes(domain.id))}
+              </span>
+            </div>
             <p className="mt-1 text-sm text-muted">{domain.description}</p>
           </div>
 
           {getModulesByDomain(domain.id).map((mod) => (
             <div key={mod.id} className="rounded-xl border border-border bg-surface p-5">
-              <h3 className="text-sm font-semibold">{mod.title}</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-semibold">{mod.title}</h3>
+                <span className="text-xs text-muted">
+                  {formatEstimatedMinutes(getModuleEstimatedMinutes(mod.id))}
+                </span>
+              </div>
               <p className="mt-1 text-sm text-muted">{mod.description}</p>
 
               <ul className="mt-4 flex flex-col gap-2">
