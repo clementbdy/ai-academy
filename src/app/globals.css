@@ -14,6 +14,21 @@
   --danger: #f87171;
 }
 
+/* Thème clair, activé via data-theme="light" sur <html> (voir ThemeToggle). */
+:root[data-theme="light"] {
+  --background: #f6f7fb;
+  --surface: #ffffff;
+  --surface-hover: #eef0f6;
+  --border: #dde1ea;
+  --foreground: #12161f;
+  --muted: #5b6472;
+  --accent: #0e7490;
+  --accent-foreground: #ffffff;
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #dc2626;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-surface: var(--surface);
