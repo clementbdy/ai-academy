@@ -15,14 +15,25 @@ import {
 // être figée dans le shell statique généré au build.
 export const dynamic = "force-dynamic";
 
+const dateFormatter = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+
 export default async function DashboardPage() {
-  const [levels, promptCount, favoriteToolCount, noteCount, projectSubmissions] = await Promise.all([
-    getLevelMap(),
-    prisma.savedPrompt.count(),
-    prisma.toolFavorite.count(),
-    prisma.note.count(),
-    prisma.projectSubmission.findMany(),
-  ]);
+  const [levels, promptCount, favoriteToolCount, noteCount, projectSubmissions, activeObjectives] =
+    await Promise.all([
+      getLevelMap(),
+      prisma.savedPrompt.count(),
+      prisma.toolFavorite.count(),
+      prisma.note.count(),
+      prisma.projectSubmission.findMany(),
+      prisma.objective.findMany({ where: { status: "active" } }),
+    ]);
+
+  const nextObjective = [...activeObjectives].sort((a, b) => {
+    if (!a.targetDate && !b.targetDate) return 0;
+    if (!a.targetDate) return 1;
+    if (!b.targetDate) return -1;
+    return a.targetDate.getTime() - b.targetDate.getTime();
+  })[0];
   const stats = getGlobalStats(levels);
   const nextSkill = getNextRecommendedSkill(levels);
   const nextModule = nextSkill ? moduleById.get(nextSkill.moduleId) : undefined;
@@ -128,6 +139,33 @@ export default async function DashboardPage() {
           — encore {formatEstimatedMinutes(remainingMinutes)} pour terminer tout le contenu
           actuellement publié (durées indicatives).
         </p>
+      </section>
+
+      <section className="rounded-xl border border-border bg-surface p-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-sm font-medium">Objectifs</h2>
+          <Link href="/objectifs" className="text-xs font-medium text-accent hover:underline">
+            {activeObjectives.length} en cours →
+          </Link>
+        </div>
+        {nextObjective ? (
+          <div className="mt-3">
+            <p className="text-sm font-medium">{nextObjective.title}</p>
+            {nextObjective.targetDate && (
+              <p className="mt-1 text-xs text-accent">
+                Échéance : {dateFormatter.format(nextObjective.targetDate)}
+              </p>
+            )}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-muted">
+            Aucun objectif en cours.{" "}
+            <Link href="/objectifs/new" className="text-accent hover:underline">
+              Fixe-toi en un
+            </Link>
+            .
+          </p>
+        )}
       </section>
 
       <section className="flex flex-col gap-3">

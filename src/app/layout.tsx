@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <body className="flex min-h-full bg-background text-foreground">
+      <body className="flex min-h-full flex-col bg-background text-foreground md:flex-row">
         <Script id="theme-init" strategy="beforeInteractive">
           {`try {
             if (localStorage.getItem("ai-academy-theme") === "light") {
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </Script>
         <Sidebar />
         <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto w-full max-w-5xl px-8 py-10">{children}</div>
+          <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-8 sm:py-10">{children}</div>
         </main>
       </body>
     </html>

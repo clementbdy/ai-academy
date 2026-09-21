@@ -20,11 +20,12 @@ const STATUS_LABELS: Record<string, string> = {
  * existe.
  */
 export async function buildCoachSystemPrompt(): Promise<string> {
-  const [levels, feed, notes, projectSubmissions] = await Promise.all([
+  const [levels, feed, notes, projectSubmissions, objectives] = await Promise.all([
     getLevelMap(),
     getRecentActivityFeed(10),
     prisma.note.findMany({ orderBy: { updatedAt: "desc" }, take: 20 }),
     prisma.projectSubmission.findMany(),
+    prisma.objective.findMany({ where: { status: "active" } }),
   ]);
 
   const skillLines = skills.map((skill) => {
@@ -50,6 +51,13 @@ export async function buildCoachSystemPrompt(): Promise<string> {
 
   const noteLines = notes.map((note) => `- ${note.title}`);
 
+  const objectiveLines = objectives.map((objective) => {
+    const deadline = objective.targetDate
+      ? ` — échéance ${objective.targetDate.toLocaleDateString("fr-FR")}`
+      : "";
+    return `- ${objective.title}${deadline}`;
+  });
+
   const lessonSections = lessons.map((lesson) => {
     const skill = skillById.get(lesson.skillId);
     return `### ${lesson.title} (compétence : ${skill?.title ?? lesson.skillId})\n${lesson.body}`;
@@ -67,6 +75,9 @@ ${projectLines.join("\n") || "Aucun projet disponible pour l'instant."}
 
 ## Activité récente (plus récent en premier)
 ${activityLines.join("\n") || "Aucune activité enregistrée pour le moment."}
+
+## Objectifs personnels en cours
+${objectiveLines.join("\n") || "Aucun objectif fixé pour le moment."}
 
 ## Notes personnelles sauvegardées par l'utilisateur
 ${noteLines.join("\n") || "Aucune note pour le moment."}
