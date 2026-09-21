@@ -315,4 +315,31 @@ export const systemesIaExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "fiabiliser-un-systeme-complet-challenge",
+    skillId: "fiabiliser-un-systeme-complet",
+    type: "challenge",
+    title: "Tester un système combiné de bout en bout",
+    instructions:
+      "Pour un système combinant au moins deux briques (agent + RAG, automatisation + IA, multimodal + agent...), conçu ou existant, exécute-le sur un cas réel de bout en bout — pas brique par brique isolément. Identifie le point de jonction le plus fragile entre les briques, teste-le spécifiquement avec un cas limite, et documente ce qui se passerait si cette jonction échouait silencieusement.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Un cas réel complet est exécuté de bout en bout à travers au moins deux briques du système, pas testé brique par brique isolément.",
+      },
+      {
+        id: "c2",
+        description: "Le point de jonction le plus fragile entre les briques est explicitement identifié et justifié.",
+      },
+      {
+        id: "c3",
+        description: "Ce point de jonction est testé avec un cas limite spécifique, pas seulement le cas nominal.",
+      },
+      {
+        id: "c4",
+        description: "Le rapport décrit la conséquence concrète d'un échec silencieux à cette jonction précise.",
+      },
+    ],
+  },
 ];

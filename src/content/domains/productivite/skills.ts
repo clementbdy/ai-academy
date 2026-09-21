@@ -74,7 +74,7 @@ export const productiviteSkills: Skill[] = [
       "Évaluer honnêtement, tâche par tâche, si recourir à l'IA fait réellement gagner du temps — plutôt que de supposer que plus d'IA équivaut toujours à plus de productivité.",
     prerequisites: ["ia-pour-apprendre", "organisation-des-taches"],
     lessonIds: ["mesurer-le-gain-reel-lesson"],
-    exerciseIds: ["mesurer-le-gain-reel-autonomous", "mesurer-le-gain-reel-quiz"],
+    exerciseIds: ["mesurer-le-gain-reel-autonomous", "mesurer-le-gain-reel-quiz", "mesurer-le-gain-reel-challenge"],
     levelDescriptors: descriptors(
       "la mesure du vrai gain de productivité",
       "Évalue après coup si une tâche assistée par IA a réellement fait gagner du temps par rapport à la faire directement.",

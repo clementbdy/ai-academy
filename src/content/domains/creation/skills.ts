@@ -74,7 +74,11 @@ export const creationSkills: Skill[] = [
       "Vérifier systématiquement trois points avant de diffuser du contenu généré par IA : droits d'auteur, consentement, et transparence — sans les négliger sous prétexte de rapidité.",
     prerequisites: ["contenu-pour-reseaux-sociaux", "generation-video-audio"],
     lessonIds: ["droits-et-ethique-creation-lesson"],
-    exerciseIds: ["droits-et-ethique-creation-autonomous", "droits-et-ethique-creation-quiz"],
+    exerciseIds: [
+      "droits-et-ethique-creation-autonomous",
+      "droits-et-ethique-creation-quiz",
+      "droits-et-ethique-creation-challenge",
+    ],
     levelDescriptors: descriptors(
       "les droits d'auteur et l'éthique de la création IA",
       "Vérifie les droits d'usage avant toute diffusion commerciale d'un contenu généré par IA.",

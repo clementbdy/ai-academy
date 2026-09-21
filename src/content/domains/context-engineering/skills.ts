@@ -74,7 +74,7 @@ export const contextEngineeringSkills: Skill[] = [
       "Comprendre que les outils activés (recherche web, exécution de code, applications connectées) font partie du contexte du modèle, et déterminent ce qu'il peut vraiment faire.",
     prerequisites: ["memoire-assistant", "bases-de-connaissances"],
     lessonIds: ["contexte-outils-lesson"],
-    exerciseIds: ["contexte-outils-autonomous", "contexte-outils-quiz"],
+    exerciseIds: ["contexte-outils-autonomous", "contexte-outils-quiz", "contexte-outils-challenge"],
     levelDescriptors: descriptors(
       "le contexte des outils disponibles",
       "Vérifie qu'un outil (recherche web, exécution de code...) est bien activé avant de compter dessus pour une tâche précise.",

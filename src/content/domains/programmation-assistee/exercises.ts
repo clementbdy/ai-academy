@@ -320,4 +320,33 @@ export const programmationAssisteeExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "verifier-du-code-genere-challenge",
+    skillId: "verifier-du-code-genere",
+    type: "challenge",
+    title: "Auditer un code généré pour du code halluciné",
+    instructions:
+      "Demande à un assistant IA un code un peu complexe utilisant au moins une librairie externe. Vérifie individuellement que chaque fonction/méthode/librairie citée existe réellement (documentation officielle), exécute réellement au moins un cas limite (entrée vide, valeur inattendue), et repère si une API est utilisée de façon obsolète ou tout simplement inventée.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Le rapport liste chaque fonction ou librairie externe utilisée dans le code et confirme individuellement son existence via une source vérifiable.",
+      },
+      {
+        id: "c2",
+        description:
+          "Au moins un cas limite (entrée vide, valeur inattendue) est réellement exécuté, pas seulement envisagé sur le papier.",
+      },
+      {
+        id: "c3",
+        description:
+          "Le rapport indique explicitement si une hallucination de code (fonction ou paramètre inexistant) a été trouvée ou non.",
+      },
+      {
+        id: "c4",
+        description: "Une conclusion tranchée est donnée : ce code est fiable tel quel, ou nécessite des corrections précises.",
+      },
+    ],
+  },
 ];

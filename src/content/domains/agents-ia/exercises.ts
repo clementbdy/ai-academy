@@ -295,4 +295,32 @@ export const agentsIaExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "validation-humaine-challenge",
+    skillId: "validation-humaine",
+    type: "challenge",
+    title: "Écrire une politique de validation pour un agent réel",
+    instructions:
+      "Pour un agent que tu utilises ou envisages d'utiliser (assistant avec accès à des outils, navigateur, email...), liste au moins six actions qu'il pourrait effectuer. Classe chacune en autonome / confirmation requise / jamais autorisée, avec une justification fondée sur la réversibilité et l'enjeu réel de l'action, pas sur une impression.",
+    criteria: [
+      {
+        id: "c1",
+        description: "Au moins six actions concrètes et réalistes pour l'agent choisi sont listées.",
+      },
+      {
+        id: "c2",
+        description:
+          "Chaque action est classée dans une des trois catégories avec une justification liée à sa réversibilité ou son enjeu, pas arbitraire.",
+      },
+      {
+        id: "c3",
+        description:
+          "Deux actions de risque comparable sont classées de façon cohérente entre elles (relecture croisée sans incohérence relevée).",
+      },
+      {
+        id: "c4",
+        description: "La politique complète pourrait être appliquée telle quelle sans jugement au cas par cas supplémentaire.",
+      },
+    ],
+  },
 ];

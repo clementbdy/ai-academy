@@ -58,7 +58,11 @@ export const ethiqueSecuriteIaSkills: Skill[] = [
       "Comprendre que les modèles reproduisent des biais présents dans leurs données d'entraînement, et définir clairement quand une décision assistée par IA doit rester validée par un humain.",
     prerequisites: ["prompt-injection-manipulation", "choisir-outil-selon-confidentialite"],
     lessonIds: ["biais-responsabilite-ia-lesson"],
-    exerciseIds: ["biais-responsabilite-ia-autonomous", "biais-responsabilite-ia-quiz"],
+    exerciseIds: [
+      "biais-responsabilite-ia-autonomous",
+      "biais-responsabilite-ia-quiz",
+      "biais-responsabilite-ia-challenge",
+    ],
     levelDescriptors: descriptors(
       "les biais des modèles et la responsabilité humaine",
       "Reste conscient qu'une sortie de modèle peut refléter un biais présent dans ses données d'entraînement, et la relit avec ce filtre sur un sujet sensible.",

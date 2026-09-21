@@ -74,7 +74,7 @@ export const agentsIaSkills: Skill[] = [
       "Classer à l'avance les actions qu'un agent peut effectuer seul, celles qui demandent une confirmation explicite, et celles qui ne devraient jamais lui être confiées sans validation.",
     prerequisites: ["supervision-agent"],
     lessonIds: ["validation-humaine-lesson"],
-    exerciseIds: ["validation-humaine-autonomous", "validation-humaine-quiz"],
+    exerciseIds: ["validation-humaine-autonomous", "validation-humaine-quiz", "validation-humaine-challenge"],
     levelDescriptors: descriptors(
       "la validation humaine des actions d'un agent",
       "Distingue une action réversible et sans enjeu d'une action irréversible ou à fort enjeu avant de la confier à un agent.",

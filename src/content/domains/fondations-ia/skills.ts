@@ -74,7 +74,11 @@ export const fondationsIaSkills: Skill[] = [
       "Comprendre pourquoi les modèles peuvent affirmer des choses fausses avec assurance, et connaître les limites structurelles à garder en tête.",
     prerequisites: ["tokens-contexte", "raisonnement"],
     lessonIds: ["hallucinations-limites-lesson"],
-    exerciseIds: ["hallucinations-limites-autonomous", "hallucinations-limites-quiz"],
+    exerciseIds: [
+      "hallucinations-limites-autonomous",
+      "hallucinations-limites-quiz",
+      "hallucinations-limites-challenge",
+    ],
     levelDescriptors: descriptors(
       "les hallucinations et limites",
       "Vérifie systématiquement les faits, chiffres et citations produits par un modèle avant de les réutiliser.",

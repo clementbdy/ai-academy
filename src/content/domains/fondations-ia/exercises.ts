@@ -278,4 +278,34 @@ export const fondationsIaExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "hallucinations-limites-challenge",
+    skillId: "hallucinations-limites",
+    type: "challenge",
+    title: "Prévenir plutôt qu'auditer : reformuler une question à risque",
+    instructions:
+      "Choisis une question qui présente au moins deux signaux de risque d'hallucination vus dans la leçon (absence de source possible, sujet hors connaissances récentes du modèle, formulation qui pousse à toujours répondre). Pose-la telle quelle à un assistant IA et note la réponse. Puis reformule la même question en intégrant des garde-fous explicites (fournir une source, autoriser explicitement \"je ne sais pas\", borner la période ou le périmètre) et repose-la. Compare les deux réponses.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Le rapport identifie explicitement au moins deux signaux de risque présents dans la question initiale, avant même d'avoir obtenu une réponse.",
+      },
+      {
+        id: "c2",
+        description:
+          "La question reformulée intègre au moins un garde-fou concret (source fournie, droit de répondre \"je ne sais pas\", périmètre borné).",
+      },
+      {
+        id: "c3",
+        description:
+          "Le rapport compare les deux réponses obtenues et évalue si la reformulation a concrètement réduit le risque apparent d'hallucination.",
+      },
+      {
+        id: "c4",
+        description:
+          "Une règle générale et réutilisable est formulée pour reformuler préventivement une question à risque, au-delà de ce cas précis.",
+      },
+    ],
+  },
 ];

@@ -281,4 +281,31 @@ export const analyseDeDonneesIaExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "verifier-les-calculs-et-conclusions-ia-challenge",
+    skillId: "verifier-les-calculs-et-conclusions-ia",
+    type: "challenge",
+    title: "Auditer une chaîne d'analyse de bout en bout",
+    instructions:
+      "Prends une analyse de données déjà réalisée avec une IA (la tienne ou reconstituée pour l'exercice) comportant au moins deux chiffres clés et une conclusion. Recalcule indépendamment chacun des deux chiffres clés (pas un seul), évalue si l'un d'eux repose sur un échantillon trop restreint, et réévalue la conclusion en tenant compte des deux vérifications combinées.",
+    criteria: [
+      {
+        id: "c1",
+        description: "Au moins deux chiffres clés distincts sont recalculés indépendamment, pas un seul.",
+      },
+      {
+        id: "c2",
+        description: "La taille et la représentativité de l'échantillon derrière chaque chiffre sont explicitement évaluées.",
+      },
+      {
+        id: "c3",
+        description:
+          "La conclusion finale est réévaluée à la lumière des deux vérifications combinées, pas traitée indépendamment de chacune.",
+      },
+      {
+        id: "c4",
+        description: "Le rapport conclut si la conclusion originale reste valable, doit être nuancée, ou doit être rejetée.",
+      },
+    ],
+  },
 ];

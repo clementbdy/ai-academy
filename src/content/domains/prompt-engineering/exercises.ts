@@ -299,4 +299,34 @@ export const promptEngineeringExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "iteration-prompt-challenge",
+    skillId: "iteration-prompt",
+    type: "challenge",
+    title: "Diagnostiquer trois échecs de prompt différents",
+    instructions:
+      "Écris volontairement trois prompts défaillants pour trois raisons différentes (par exemple : rôle absent, contraintes de format manquantes, absence d'exemple sur une tâche qui en a besoin). Pour chacun, pose la question à un assistant IA, observe l'échec, diagnostique en une phrase la cause précise avant de corriger, puis corrige uniquement l'élément diagnostiqué et vérifie si cela suffit.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Les trois prompts défaillants couvrent trois causes clairement différentes, pas trois variations du même problème.",
+      },
+      {
+        id: "c2",
+        description:
+          "Pour chaque cas, la cause est diagnostiquée explicitement avant la correction, pas déduite après coup à partir du résultat corrigé.",
+      },
+      {
+        id: "c3",
+        description:
+          "Chaque correction ne modifie que l'élément diagnostiqué, pour vérifier isolément si c'était bien lui qui posait problème.",
+      },
+      {
+        id: "c4",
+        description:
+          "Le rapport conclut, pour chacun des trois cas, si la correction ciblée a suffi à résoudre le problème ou non.",
+      },
+    ],
+  },
 ];

@@ -307,4 +307,34 @@ export const contextEngineeringExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "contexte-outils-challenge",
+    skillId: "contexte-outils",
+    type: "challenge",
+    title: "Détecter un outil silencieusement inactif",
+    instructions:
+      "Choisis une tâche qui nécessite un outil précis (recherche web pour une info récente, exécution de code pour un calcul). Pose la question en vérifiant que l'outil est bien activé, et note les signes concrets de son utilisation réelle dans la réponse (sources, résultat d'exécution visible...). Puis désactive volontairement cet outil (ou change de mode) et repose une question similaire. Compare les deux réponses.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Le rapport identifie au moins deux signes concrets indiquant qu'un outil a réellement été utilisé, pas seulement l'affirmation du modèle qu'il l'a fait.",
+      },
+      {
+        id: "c2",
+        description:
+          "Une comparaison réelle est faite entre une réponse avec l'outil actif et une réponse sans, sur une tâche similaire.",
+      },
+      {
+        id: "c3",
+        description:
+          "Le rapport identifie au moins un signe qui aurait dû alerter si l'outil avait été silencieusement inactif dans le second cas.",
+      },
+      {
+        id: "c4",
+        description:
+          "Une règle pratique est formulée pour vérifier systématiquement, à l'avenir, qu'un outil attendu a bien été utilisé.",
+      },
+    ],
+  },
 ];

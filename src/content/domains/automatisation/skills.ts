@@ -74,7 +74,11 @@ export const automatisationSkills: Skill[] = [
       "Concevoir un scénario pour qu'un échec soit détecté et signalé, plutôt que de découvrir des mois plus tard qu'il ne fonctionnait plus depuis longtemps.",
     prerequisites: ["conditions-boucles", "webhooks-api"],
     lessonIds: ["gestion-erreurs-automatisation-lesson"],
-    exerciseIds: ["gestion-erreurs-automatisation-autonomous", "gestion-erreurs-automatisation-quiz"],
+    exerciseIds: [
+      "gestion-erreurs-automatisation-autonomous",
+      "gestion-erreurs-automatisation-quiz",
+      "gestion-erreurs-automatisation-challenge",
+    ],
     levelDescriptors: descriptors(
       "la gestion des erreurs dans une automatisation",
       "Ajoute un gestionnaire d'erreur ou une notification d'échec sur une automatisation qui tourne sans surveillance.",

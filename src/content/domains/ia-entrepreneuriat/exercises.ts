@@ -322,4 +322,32 @@ export const iaEntrepreneuriatExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "automatiser-les-operations-challenge",
+    skillId: "automatiser-les-operations",
+    type: "challenge",
+    title: "Trancher automatisation simple vs agent pour trois processus",
+    instructions:
+      "Liste trois processus opérationnels réels ou réalistes pour un petit projet ou une petite activité (réponse aux emails, relance clients, veille...). Pour chacun, détermine s'il est plus adapté à une automatisation simple (règles fixes) ou à un agent (décisions variables), avec justification — et vérifie d'abord qu'il a déjà été fait manuellement avec succès plusieurs fois.",
+    criteria: [
+      {
+        id: "c1",
+        description: "Trois processus opérationnels réels ou réalistes et clairement distincts sont listés.",
+      },
+      {
+        id: "c2",
+        description:
+          "Pour chacun, le rapport vérifie explicitement qu'il a déjà été réalisé manuellement avec succès avant d'envisager l'automatisation.",
+      },
+      {
+        id: "c3",
+        description:
+          "Le choix entre automatisation simple et agent est justifié par la stabilité ou la variabilité des décisions requises, pas arbitraire.",
+      },
+      {
+        id: "c4",
+        description: "Le rapport identifie lequel des trois processus est prioritaire à automatiser en premier, et pourquoi.",
+      },
+    ],
+  },
 ];

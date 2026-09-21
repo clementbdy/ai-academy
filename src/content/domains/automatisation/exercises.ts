@@ -301,4 +301,33 @@ export const automatisationExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "gestion-erreurs-automatisation-challenge",
+    skillId: "gestion-erreurs-automatisation",
+    type: "challenge",
+    title: "Stress-tester une automatisation avec des données cassées",
+    instructions:
+      "Prends un scénario d'automatisation (existant, ou conçu sur papier pour cet exercice) et liste trois types de données volontairement problématiques qu'il pourrait recevoir (champ vide, format inattendu, volume anormalement élevé). Pour chacun, détermine ce que ferait le scénario actuel sans gestion d'erreur, puis conçois le garde-fou correspondant.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Trois cas de données problématiques distincts et réalistes pour le scénario choisi sont identifiés.",
+      },
+      {
+        id: "c2",
+        description:
+          "Pour chaque cas, le rapport décrit précisément ce qui se passerait sans garde-fou (échec silencieux, erreur bloquante, résultat faux...).",
+      },
+      {
+        id: "c3",
+        description: "Un garde-fou concret et applicable est proposé pour chacun des trois cas.",
+      },
+      {
+        id: "c4",
+        description:
+          "Le rapport identifie lequel des trois cas est le plus critique à traiter en priorité, avec justification.",
+      },
+    ],
+  },
 ];

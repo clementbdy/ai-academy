@@ -74,7 +74,7 @@ export const promptEngineeringSkills: Skill[] = [
       "Traiter un prompt raté comme un point de départ à corriger méthodiquement plutôt qu'un échec : identifier ce qui a manqué, ajuster une variable à la fois, et garder trace de ce qui fonctionne.",
     prerequisites: ["criteres-verification"],
     lessonIds: ["iteration-prompt-lesson"],
-    exerciseIds: ["iteration-prompt-autonomous", "iteration-prompt-quiz"],
+    exerciseIds: ["iteration-prompt-autonomous", "iteration-prompt-quiz", "iteration-prompt-challenge"],
     levelDescriptors: descriptors(
       "l'itération sur un prompt",
       "Face à une réponse décevante, ajuste le prompt de façon ciblée (une variable à la fois) plutôt que de tout reformuler au hasard.",

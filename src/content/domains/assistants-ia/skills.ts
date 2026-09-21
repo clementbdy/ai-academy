@@ -58,7 +58,7 @@ export const assistantsIaSkills: Skill[] = [
       "Comprendre la différence entre un espace de travail personnel et un assistant personnalisé (Custom GPT, Gem) conçu pour être découvert et réutilisé par d'autres.",
     prerequisites: ["bases-de-connaissances"],
     lessonIds: ["assistants-personnalises-lesson"],
-    exerciseIds: ["assistants-personnalises-quiz"],
+    exerciseIds: ["assistants-personnalises-quiz", "assistants-personnalises-challenge"],
     levelDescriptors: descriptors(
       "les assistants personnalisés partageables",
       "Identifie qu'une tâche répétée et partagée avec d'autres personnes justifierait un assistant personnalisé plutôt qu'un usage individuel.",

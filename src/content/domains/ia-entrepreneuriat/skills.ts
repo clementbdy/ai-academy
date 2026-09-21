@@ -74,7 +74,11 @@ export const iaEntrepreneuriatSkills: Skill[] = [
       "N'automatiser qu'un processus déjà éprouvé manuellement plusieurs fois, en choisissant la brique adaptée à sa nature réelle.",
     prerequisites: ["construire-un-mvp", "acquisition-et-contenu"],
     lessonIds: ["automatiser-les-operations-lesson"],
-    exerciseIds: ["automatiser-les-operations-autonomous", "automatiser-les-operations-quiz"],
+    exerciseIds: [
+      "automatiser-les-operations-autonomous",
+      "automatiser-les-operations-quiz",
+      "automatiser-les-operations-challenge",
+    ],
     levelDescriptors: descriptors(
       "l'automatisation des opérations",
       "Vérifie qu'un processus a déjà été réalisé manuellement avec succès plusieurs fois avant d'envisager de l'automatiser.",

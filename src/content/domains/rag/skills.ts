@@ -74,7 +74,11 @@ export const ragSkills: Skill[] = [
       "Tester un système RAG avec une question dont la réponse est connue et présente, et une question dont la réponse est absente — pour voir s'il sait reconnaître ce qu'il ne sait pas.",
     prerequisites: ["pipeline-rag-complet", "hallucinations-limites"],
     lessonIds: ["verifier-un-systeme-rag-lesson"],
-    exerciseIds: ["verifier-un-systeme-rag-autonomous", "verifier-un-systeme-rag-quiz"],
+    exerciseIds: [
+      "verifier-un-systeme-rag-autonomous",
+      "verifier-un-systeme-rag-quiz",
+      "verifier-un-systeme-rag-challenge",
+    ],
     levelDescriptors: descriptors(
       "la vérification d'un système RAG",
       "Teste un système RAG avec une question dont il connaît déjà la vraie réponse, pour vérifier la source citée.",

@@ -294,4 +294,33 @@ export const ragExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "verifier-un-systeme-rag-challenge",
+    skillId: "verifier-un-systeme-rag",
+    type: "challenge",
+    title: "Tester un système RAG aux limites de sa base",
+    instructions:
+      "Sur un système RAG (existant, une démo, ou conçu sur papier avec un jeu de documents précis), pose une question dont la réponse est dans les documents (vérifie la source citée), une question dont la réponse n'y est pas (vérifie s'il l'invente ou reconnaît son absence), puis une question ambiguë à la limite du périmètre des documents.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Les trois questions (dans la base, hors base, à la limite) sont clairement distinguées et documentées.",
+      },
+      {
+        id: "c2",
+        description: "Pour la question dans la base, la source citée par le système est vérifiée comme correcte.",
+      },
+      {
+        id: "c3",
+        description:
+          "Pour la question hors base, le rapport indique explicitement si le système a inventé une réponse ou reconnu son absence.",
+      },
+      {
+        id: "c4",
+        description:
+          "Une conclusion évalue la fiabilité globale du système face à ses propres limites, pas seulement sur les cas favorables.",
+      },
+    ],
+  },
 ];

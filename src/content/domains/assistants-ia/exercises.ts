@@ -262,4 +262,33 @@ export const assistantsIaExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "assistants-personnalises-challenge",
+    skillId: "assistants-personnalises",
+    type: "challenge",
+    title: "Concevoir un assistant personnalisé pour un tiers",
+    instructions:
+      "Crée un assistant personnalisé (instructions, et documents/connaissances attachées si l'outil le permet) destiné à être utilisé par quelqu'un d'autre que toi (collègue, ami, famille) pour une tâche précise. Rédige les instructions pour qu'elles soient compréhensibles sans toi à côté pour les expliquer. Fais-le tester par cette personne, ou simule sérieusement son usage avec un regard extérieur, et note ce qui a manqué de clarté.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Les instructions de l'assistant sont rédigées pour un tiers, sans référence implicite compréhensible seulement par son créateur.",
+      },
+      {
+        id: "c2",
+        description:
+          "Le rapport identifie au moins un point ayant nécessité clarification lors du test par un tiers (réel ou simulé sérieusement).",
+      },
+      {
+        id: "c3",
+        description: "Les instructions ont été révisées après ce retour pour corriger le point identifié.",
+      },
+      {
+        id: "c4",
+        description:
+          "Une conclusion explicite distingue ce qui relevait de la personnalisation de ce qui aurait nécessité un modèle ou un outil différent.",
+      },
+    ],
+  },
 ];

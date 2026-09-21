@@ -330,4 +330,34 @@ export const creationExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "droits-et-ethique-creation-challenge",
+    skillId: "droits-et-ethique-creation",
+    type: "challenge",
+    title: "Auditer un projet de création IA sous l'angle droits et consentement",
+    instructions:
+      "Prends un projet de contenu (réel ou fictif mais réaliste) impliquant de l'IA générative (image, voix, vidéo). Liste tous les éléments qui posent une question de droit ou de consentement (image/voix d'une personne réelle, style d'un artiste identifiable, musique...), et pour chacun, détermine l'action nécessaire avant toute diffusion.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Au moins trois éléments distincts posant une question de droit ou de consentement sont identifiés dans le projet choisi.",
+      },
+      {
+        id: "c2",
+        description:
+          "Pour chacun, une action concrète et nécessaire avant diffusion est précisée (autorisation, mention de transparence IA, remplacement...).",
+      },
+      {
+        id: "c3",
+        description:
+          "Le rapport distingue explicitement usage personnel/privé et diffusion commerciale/publique pour au moins un des éléments.",
+      },
+      {
+        id: "c4",
+        description:
+          "Une politique de transparence sur l'origine IA du contenu est formulée et appliquée de façon cohérente à l'ensemble du projet.",
+      },
+    ],
+  },
 ];

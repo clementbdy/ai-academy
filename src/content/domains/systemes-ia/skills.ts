@@ -74,7 +74,11 @@ export const systemesIaSkills: Skill[] = [
       "Appliquer gestion d'erreur, supervision et validation humaine à l'ensemble d'un système combiné, et le tester de bout en bout plutôt que brique par brique.",
     prerequisites: ["connecter-les-briques", "systemes-multimodaux", "validation-humaine"],
     lessonIds: ["fiabiliser-un-systeme-complet-lesson"],
-    exerciseIds: ["fiabiliser-un-systeme-complet-autonomous", "fiabiliser-un-systeme-complet-quiz"],
+    exerciseIds: [
+      "fiabiliser-un-systeme-complet-autonomous",
+      "fiabiliser-un-systeme-complet-quiz",
+      "fiabiliser-un-systeme-complet-challenge",
+    ],
     levelDescriptors: descriptors(
       "la fiabilisation d'un système complet",
       "Identifie les points de jonction d'un système combiné comme des points de fragilité à traiter spécifiquement.",

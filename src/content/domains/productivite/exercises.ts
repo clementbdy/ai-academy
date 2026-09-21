@@ -327,4 +327,33 @@ export const productiviteExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "mesurer-le-gain-reel-challenge",
+    skillId: "mesurer-le-gain-reel",
+    type: "challenge",
+    title: "Prédire puis vérifier le gain réel sur trois tâches",
+    instructions:
+      "Choisis trois tâches variées de ton quotidien. Avant de les faire, prédis pour chacune si l'IA fera gagner du temps ou ajoutera de la friction, et pourquoi. Fais ensuite chaque tâche avec l'IA en chronométrant, puis sans l'IA (ou estime honnêtement le temps sans IA). Compare tes prédictions aux résultats réels.",
+    criteria: [
+      {
+        id: "c1",
+        description:
+          "Une prédiction explicite (gain ou friction attendue) est formulée pour chacune des trois tâches avant de les réaliser.",
+      },
+      {
+        id: "c2",
+        description:
+          "Un temps réel (ou une estimation honnête et justifiée) est rapporté pour chaque tâche, avec et sans IA.",
+      },
+      {
+        id: "c3",
+        description: "Le rapport indique explicitement, pour chaque tâche, si la prédiction initiale était correcte.",
+      },
+      {
+        id: "c4",
+        description:
+          "Une règle d'usage personnelle est ajustée sur la base d'au moins une prédiction qui s'est révélée fausse.",
+      },
+    ],
+  },
 ];

@@ -61,6 +61,7 @@ export const analyseDeDonneesIaSkills: Skill[] = [
     exerciseIds: [
       "verifier-les-calculs-et-conclusions-ia-autonomous",
       "verifier-les-calculs-et-conclusions-ia-quiz",
+      "verifier-les-calculs-et-conclusions-ia-challenge",
     ],
     levelDescriptors: descriptors(
       "la vérification des calculs et conclusions d'une IA",

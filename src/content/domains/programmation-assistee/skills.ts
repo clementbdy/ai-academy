@@ -58,7 +58,11 @@ export const programmationAssisteeSkills: Skill[] = [
       "Exécuter réellement un code généré par IA et le tester sur des cas limites, plutôt que de lui faire confiance sur la seule lecture.",
     prerequisites: ["prompter-du-code"],
     lessonIds: ["verifier-du-code-genere-lesson"],
-    exerciseIds: ["verifier-du-code-genere-autonomous", "verifier-du-code-genere-quiz"],
+    exerciseIds: [
+      "verifier-du-code-genere-autonomous",
+      "verifier-du-code-genere-quiz",
+      "verifier-du-code-genere-challenge",
+    ],
     levelDescriptors: descriptors(
       "la vérification de code généré par IA",
       "Exécute réellement un code généré avant de le considérer bon, plutôt que de juger sur la seule lecture.",

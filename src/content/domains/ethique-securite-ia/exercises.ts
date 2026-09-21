@@ -286,4 +286,31 @@ export const ethiqueSecuriteIaExercises: Exercise[] = [
       },
     ],
   },
+  {
+    id: "biais-responsabilite-ia-challenge",
+    skillId: "biais-responsabilite-ia",
+    type: "challenge",
+    title: "Rédiger une politique de validation humaine contre les biais",
+    instructions:
+      "Pour un usage réel ou réaliste de l'IA affectant des tiers (recrutement, évaluation, attribution de ressources), rédige une politique écrite précisant : dans quels cas une décision assistée par IA peut être appliquée sans révision, dans quels cas une validation humaine documentée est obligatoire, et quel test de biais (variation d'un détail identitaire) doit être effectué avant la mise en production d'un tel usage.",
+    criteria: [
+      {
+        id: "c1",
+        description: "La politique distingue au moins deux niveaux d'enjeu avec des règles de validation différentes pour chacun.",
+      },
+      {
+        id: "c2",
+        description:
+          "Un test de biais concret (méthode de variation d'un détail identitaire) est intégré comme étape obligatoire avant mise en production.",
+      },
+      {
+        id: "c3",
+        description: "La politique précise qui est responsable de la décision finale, pas seulement \"l'IA\" ou \"le système\".",
+      },
+      {
+        id: "c4",
+        description: "La politique pourrait être appliquée telle quelle par quelqu'un d'autre que son auteur, sans ambiguïté d'interprétation.",
+      },
+    ],
+  },
 ];
