@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import { Sidebar } from "@/components/Sidebar";
+import { auth } from "@/lib/auth";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
   description: "Mon école personnelle de l'intelligence artificielle.",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  const session = await auth();
+
   return (
     <html
       lang="fr"
@@ -34,7 +37,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             }
           } catch (e) {}`}
         </Script>
-        <Sidebar />
+        <Sidebar session={session} />
         <main className="flex-1 overflow-y-auto">
           <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-8 sm:py-10">{children}</div>
         </main>

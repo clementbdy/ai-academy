@@ -20,11 +20,13 @@ Philosophie : **apprendre → pratiquer → créer → automatiser → maîtrise
 - **Objectifs & Progression** — suivi d'objectifs personnels avec échéances, historique d'activité, temps de formation estimé et temps réellement mesuré.
 - **Recherche globale** — retrouve en un instant une note, un prompt, un workflow, un outil, une compétence ou un objectif.
 - **Thème clair/sombre**, interface responsive (sidebar repliable sur mobile).
+- **Multi-utilisateur** — comptes email/mot de passe ou Google, données entièrement isolées par utilisateur.
 
 ## Stack technique
 
 - [Next.js 16](https://nextjs.org) (App Router, Turbopack) + TypeScript + Tailwind CSS
 - [Prisma 7](https://www.prisma.io) + SQLite (via l'adaptateur `@prisma/adapter-better-sqlite3`)
+- [Auth.js v5](https://authjs.dev) (Credentials + Google OAuth, sessions JWT)
 - [Claude](https://www.anthropic.com/claude) (`@anthropic-ai/sdk`) pour le Coach IA
 
 Le contenu pédagogique (domaines, compétences, leçons, exercices) est versionné en TypeScript dans `src/content/` ; seules les données utilisateur (progression, soumissions, notes, objectifs...) vivent en base SQLite via Prisma.
@@ -34,12 +36,13 @@ Le contenu pédagogique (domaines, compétences, leçons, exercices) est version
 ```bash
 npm install
 cp .env.example .env
-# renseigner ANTHROPIC_API_KEY dans .env (nécessaire pour le Coach IA)
+# renseigner ANTHROPIC_API_KEY (Coach IA), AUTH_SECRET (openssl rand -base64 32)
+# et, pour la connexion Google, AUTH_GOOGLE_ID / AUTH_GOOGLE_SECRET
 npx prisma migrate deploy
 npm run dev
 ```
 
-Ouvrir [http://localhost:3000](http://localhost:3000).
+Ouvrir [http://localhost:3000](http://localhost:3000) — redirige vers `/signup` pour créer le premier compte.
 
 ## Scripts utiles
 
@@ -51,4 +54,4 @@ npm run build             # build de production
 
 ## Contexte
 
-Projet personnel et local, conçu à l'origine pour un usage mono-utilisateur (pas d'authentification, base SQLite locale).
+Projet personnel et local, conçu à l'origine pour un usage mono-utilisateur. L'authentification multi-utilisateur pose les fondations pour une ouverture publique future ; reste à migrer vers une base hébergée (SQLite ne convient qu'à un déploiement local) avant toute mise en production.

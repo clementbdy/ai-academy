@@ -1,11 +1,13 @@
 import { buildSkillGraph } from "@/lib/skill-graph";
 import { getLevelMap } from "@/lib/skill-progress";
 import { SkillTreeGraph } from "@/components/SkillTreeGraph";
+import { requireUserId } from "@/lib/current-user";
 
 export const dynamic = "force-dynamic";
 
 export default async function CompetencesPage() {
-  const levels = await getLevelMap();
+  const userId = await requireUserId();
+  const levels = await getLevelMap(userId);
   const { nodes, edges } = buildSkillGraph();
 
   return (

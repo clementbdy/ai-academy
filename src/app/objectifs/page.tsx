@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
+import { requireUserId } from "@/lib/current-user";
 import { setObjectiveStatusAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -13,7 +14,11 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 export default async function ObjectifsPage() {
-  const objectives = await prisma.objective.findMany({ orderBy: { createdAt: "desc" } });
+  const userId = await requireUserId();
+  const objectives = await prisma.objective.findMany({
+    where: { userId },
+    orderBy: { createdAt: "desc" },
+  });
 
   const active = objectives
     .filter((o) => o.status === "active")

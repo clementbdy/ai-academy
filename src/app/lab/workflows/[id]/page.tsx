@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { parseStringArray } from "@/lib/json-fields";
 import { Field, TextAreaField } from "@/components/FormFields";
+import { requireUserId } from "@/lib/current-user";
 import { updateWorkflowAction, deleteWorkflowAction } from "../../actions";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +13,9 @@ export default async function WorkflowDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const userId = await requireUserId();
   const workflow = await prisma.workflow.findUnique({ where: { id } });
-  if (!workflow) notFound();
+  if (!workflow || workflow.userId !== userId) notFound();
 
   const steps = parseStringArray(workflow.steps).join("\n");
 

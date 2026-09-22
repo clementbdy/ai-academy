@@ -6,6 +6,7 @@ import { getLevelMap } from "@/lib/skill-progress";
 import { isProjectUnlocked } from "@/lib/project-progress";
 import { prisma } from "@/lib/db";
 import { CriteriaExerciseRunner } from "@/components/CriteriaExerciseRunner";
+import { requireUserId } from "@/lib/current-user";
 import { submitProjectAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +20,8 @@ export default async function ProjectDetailPage({
   const project = projectById.get(projectId);
   if (!project) notFound();
 
-  const levels = await getLevelMap();
+  const userId = await requireUserId();
+  const levels = await getLevelMap(userId);
   const unlocked = isProjectUnlocked(project, levels);
 
   return (
@@ -72,7 +74,7 @@ export default async function ProjectDetailPage({
             </div>
           </section>
 
-          <ProjectSubmissionSection projectId={project.id} criteria={project.criteria} />
+          <ProjectSubmissionSection userId={userId} projectId={project.id} criteria={project.criteria} />
         </>
       )}
     </div>
@@ -80,13 +82,15 @@ export default async function ProjectDetailPage({
 }
 
 async function ProjectSubmissionSection({
+  userId,
   projectId,
   criteria,
 }: {
+  userId: string;
   projectId: string;
   criteria: { id: string; description: string }[];
 }) {
-  const submission = await prisma.projectSubmission.findFirst({ where: { projectId } });
+  const submission = await prisma.projectSubmission.findFirst({ where: { userId, projectId } });
 
   return (
     <section className="rounded-xl border border-border bg-surface p-5">

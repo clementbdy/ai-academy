@@ -2,6 +2,7 @@ import Link from "next/link";
 import { tools, getToolCategories } from "@/content/registry";
 import { prisma } from "@/lib/db";
 import type { ToolEntry, ToolLevel, ToolPricing } from "@/content/types";
+import { requireUserId } from "@/lib/current-user";
 import { toggleToolFavoriteAction, saveToolNoteAction } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -27,7 +28,8 @@ export default async function OutilsPage({
   const query = q?.trim() ?? "";
   const category = categorie ?? "";
 
-  const favorites = await prisma.toolFavorite.findMany();
+  const userId = await requireUserId();
+  const favorites = await prisma.toolFavorite.findMany({ where: { userId } });
   const favoriteByToolId = new Map(favorites.map((f) => [f.toolId, f]));
 
   const categories = getToolCategories();

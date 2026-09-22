@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { parseStringArray } from "@/lib/json-fields";
 import { Field, TextAreaField } from "@/components/FormFields";
 import { domains, getModulesByDomain, getSkillsByModule } from "@/content/registry";
+import { requireUserId } from "@/lib/current-user";
 import { updateNoteAction, deleteNoteAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -13,8 +14,9 @@ export default async function NoteDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const userId = await requireUserId();
   const note = await prisma.note.findUnique({ where: { id } });
-  if (!note) notFound();
+  if (!note || note.userId !== userId) notFound();
 
   const tags = parseStringArray(note.tags).join(", ");
 

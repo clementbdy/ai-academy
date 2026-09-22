@@ -5,11 +5,11 @@ import { prisma } from "@/lib/db";
  * ouverte et active dans ce navigateur, plafonné par activité pour éviter
  * qu'un onglet oublié ouvert ne gonfle artificiellement le total. C'est un
  * temps réel enregistré, pas une estimation (voir @/lib/time-estimate). */
-export async function getRealTimeSpentSeconds(): Promise<number> {
+export async function getRealTimeSpentSeconds(userId: string): Promise<number> {
   const [activityAgg, exerciseAgg, projectAgg] = await Promise.all([
-    prisma.activityLog.aggregate({ _sum: { timeSpentSec: true } }),
-    prisma.exerciseSubmission.aggregate({ _sum: { timeSpentSec: true } }),
-    prisma.projectSubmission.aggregate({ _sum: { timeSpentSec: true } }),
+    prisma.activityLog.aggregate({ where: { userId }, _sum: { timeSpentSec: true } }),
+    prisma.exerciseSubmission.aggregate({ where: { userId }, _sum: { timeSpentSec: true } }),
+    prisma.projectSubmission.aggregate({ where: { userId }, _sum: { timeSpentSec: true } }),
   ]);
 
   return (

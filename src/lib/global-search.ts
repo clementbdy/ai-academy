@@ -26,25 +26,25 @@ function snippet(text: string, length = 140): string {
   return trimmed.length > length ? `${trimmed.slice(0, length)}…` : trimmed;
 }
 
-export async function globalSearch(query: string): Promise<SearchResult[]> {
+export async function globalSearch(userId: string, query: string): Promise<SearchResult[]> {
   const q = query.trim();
   if (!q) return [];
 
   const [notes, prompts, workflows, objectives] = await Promise.all([
     prisma.note.findMany({
-      where: { OR: [{ title: { contains: q } }, { content: { contains: q } }] },
+      where: { userId, OR: [{ title: { contains: q } }, { content: { contains: q } }] },
       take: 10,
     }),
     prisma.savedPrompt.findMany({
-      where: { OR: [{ title: { contains: q } }, { prompt: { contains: q } }] },
+      where: { userId, OR: [{ title: { contains: q } }, { prompt: { contains: q } }] },
       take: 10,
     }),
     prisma.workflow.findMany({
-      where: { OR: [{ title: { contains: q } }, { description: { contains: q } }] },
+      where: { userId, OR: [{ title: { contains: q } }, { description: { contains: q } }] },
       take: 10,
     }),
     prisma.objective.findMany({
-      where: { OR: [{ title: { contains: q } }, { description: { contains: q } }] },
+      where: { userId, OR: [{ title: { contains: q } }, { description: { contains: q } }] },
       take: 10,
     }),
   ]);

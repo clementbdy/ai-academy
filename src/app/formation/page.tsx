@@ -9,11 +9,13 @@ import {
   getTotalEstimatedMinutes,
   formatEstimatedMinutes,
 } from "@/lib/time-estimate";
+import { requireUserId } from "@/lib/current-user";
 
 export const dynamic = "force-dynamic";
 
 export default async function FormationPage() {
-  const levels = await getLevelMap();
+  const userId = await requireUserId();
+  const levels = await getLevelMap(userId);
   const totalMinutes = getTotalEstimatedMinutes();
 
   return (

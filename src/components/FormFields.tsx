@@ -1,12 +1,14 @@
 export function Field({
   label,
   name,
+  type = "text",
   placeholder,
   defaultValue,
   required,
 }: {
   label: string;
   name: string;
+  type?: string;
   placeholder?: string;
   defaultValue?: string;
   required?: boolean;
@@ -16,6 +18,7 @@ export function Field({
       <span className="text-xs font-medium text-muted">{label}</span>
       <input
         name={name}
+        type={type}
         placeholder={placeholder}
         defaultValue={defaultValue}
         required={required}

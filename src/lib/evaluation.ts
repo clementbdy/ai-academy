@@ -20,7 +20,7 @@ import { skillById, getLessonsBySkill, getExercisesBySkill } from "@/content/reg
  *      niveau reste plafonné à 3 plutôt que d'affirmer une maîtrise non
  *      vérifiée.
  */
-export async function recomputeSkillLevel(skillId: string): Promise<number> {
+export async function recomputeSkillLevel(userId: string, skillId: string): Promise<number> {
   const skill = skillById.get(skillId);
   if (!skill) throw new Error(`Compétence inconnue : ${skillId}`);
 
@@ -31,7 +31,7 @@ export async function recomputeSkillLevel(skillId: string): Promise<number> {
   const challengeExercises = exercises.filter((e) => e.type === "challenge");
 
   const { readLessonIds, quizBestByExercise, submissionByExercise } =
-    await getSkillActivityState(skillId);
+    await getSkillActivityState(userId, skillId);
 
   const lessonRead = lessons.every((lesson) => readLessonIds.has(lesson.id));
 
@@ -61,8 +61,8 @@ export async function recomputeSkillLevel(skillId: string): Promise<number> {
   const level = gate4 ? 4 : gate3 ? 3 : gate2 ? 2 : gate1 ? 1 : 0;
 
   await prisma.skillProgress.upsert({
-    where: { skillId },
-    create: { skillId, level },
+    where: { userId_skillId: { userId, skillId } },
+    create: { userId, skillId, level },
     update: { level },
   });
 

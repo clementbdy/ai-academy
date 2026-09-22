@@ -3,6 +3,7 @@
 import type Anthropic from "@anthropic-ai/sdk";
 import { getAnthropicClient, COACH_MODEL } from "@/lib/anthropic";
 import { buildCoachSystemPrompt } from "@/lib/coach-context";
+import { requireUserId } from "@/lib/current-user";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -14,6 +15,8 @@ export type SendCoachMessageResult = { reply: string } | { error: string };
 export async function sendCoachMessageAction(
   history: ChatMessage[],
 ): Promise<SendCoachMessageResult> {
+  const userId = await requireUserId();
+
   let client;
   try {
     client = getAnthropicClient();
@@ -24,7 +27,7 @@ export async function sendCoachMessageAction(
     };
   }
 
-  const systemPrompt = await buildCoachSystemPrompt();
+  const systemPrompt = await buildCoachSystemPrompt(userId);
 
   try {
     const response = await client.messages.create({

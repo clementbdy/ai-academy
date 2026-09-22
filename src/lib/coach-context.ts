@@ -25,13 +25,13 @@ const STATUS_LABELS: Record<string, string> = {
  * tout embarquer à chaque message ferait exploser le coût en tokens sans
  * rapport avec ce que l'utilisateur travaille réellement.
  */
-export async function buildCoachSystemPrompt(): Promise<string> {
+export async function buildCoachSystemPrompt(userId: string): Promise<string> {
   const [levels, feed, notes, projectSubmissions, objectives] = await Promise.all([
-    getLevelMap(),
-    getRecentActivityFeed(10),
-    prisma.note.findMany({ orderBy: { updatedAt: "desc" }, take: 20 }),
-    prisma.projectSubmission.findMany(),
-    prisma.objective.findMany({ where: { status: "active" } }),
+    getLevelMap(userId),
+    getRecentActivityFeed(userId, 10),
+    prisma.note.findMany({ where: { userId }, orderBy: { updatedAt: "desc" }, take: 20 }),
+    prisma.projectSubmission.findMany({ where: { userId } }),
+    prisma.objective.findMany({ where: { userId, status: "active" } }),
   ]);
 
   const skillLines = skills.map((skill) => {
@@ -94,7 +94,7 @@ export async function buildCoachSystemPrompt(): Promise<string> {
   const exerciseSections = (
     await Promise.all(
       [...relevantSkillIds].map(async (skillId) => {
-        const activityState = await getSkillActivityState(skillId);
+        const activityState = await getSkillActivityState(userId, skillId);
         const skillTitle = skillById.get(skillId)?.title ?? skillId;
         const parts = getExercisesBySkill(skillId).map((exercise) =>
           formatExerciseForCoach(exercise, activityState),

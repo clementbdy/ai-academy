@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { Field, TextAreaField } from "@/components/FormFields";
+import { requireUserId } from "@/lib/current-user";
 import { updateObjectiveAction, deleteObjectiveAction } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -11,8 +12,9 @@ export default async function ObjectiveDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const userId = await requireUserId();
   const objective = await prisma.objective.findUnique({ where: { id } });
-  if (!objective) notFound();
+  if (!objective || objective.userId !== userId) notFound();
 
   const targetDateValue = objective.targetDate
     ? objective.targetDate.toISOString().slice(0, 10)

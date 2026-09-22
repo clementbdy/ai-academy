@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import type { Session } from "next-auth";
+import { signOutAction } from "@/lib/auth-actions";
 
 const navItems = [
   { href: "/", label: "Dashboard" },
@@ -69,7 +71,7 @@ function NavLink({
   );
 }
 
-export function Sidebar() {
+export function Sidebar({ session }: { session: Session | null }) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [lastPathname, setLastPathname] = useState(pathname);
@@ -77,6 +79,10 @@ export function Sidebar() {
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
     setIsOpen(false);
+  }
+
+  if (pathname.startsWith("/login") || pathname.startsWith("/signup")) {
+    return null;
   }
 
   function isItemActive(href: string) {
@@ -107,6 +113,18 @@ export function Sidebar() {
             onClick={() => setIsOpen(false)}
           />
         ))}
+        {session?.user && (
+          <div className="mt-2 flex items-center justify-between gap-2 px-3">
+            <span className="truncate text-xs text-muted" title={session.user.email ?? undefined}>
+              {session.user.email}
+            </span>
+            <form action={signOutAction}>
+              <button type="submit" className="shrink-0 text-xs text-muted hover:text-foreground">
+                Se déconnecter
+              </button>
+            </form>
+          </div>
+        )}
       </nav>
     </>
   );

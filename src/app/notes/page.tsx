@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { parseStringArray } from "@/lib/json-fields";
 import { globalSearch, TYPE_LABELS } from "@/lib/global-search";
 import { skillById } from "@/content/registry";
+import { requireUserId } from "@/lib/current-user";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,7 @@ export default async function NotesPage({
 }) {
   const { q } = await searchParams;
   const query = q?.trim() ?? "";
+  const userId = await requireUserId();
 
   return (
     <div className="flex flex-col gap-8">
@@ -50,13 +52,13 @@ export default async function NotesPage({
         )}
       </form>
 
-      {query ? <SearchResults query={query} /> : <NotesList />}
+      {query ? <SearchResults userId={userId} query={query} /> : <NotesList userId={userId} />}
     </div>
   );
 }
 
-async function SearchResults({ query }: { query: string }) {
-  const results = await globalSearch(query);
+async function SearchResults({ userId, query }: { userId: string; query: string }) {
+  const results = await globalSearch(userId, query);
 
   if (results.length === 0) {
     return <p className="text-sm text-muted">Aucun résultat pour « {query} ».</p>;
@@ -84,8 +86,8 @@ async function SearchResults({ query }: { query: string }) {
   );
 }
 
-async function NotesList() {
-  const notes = await prisma.note.findMany({ orderBy: { updatedAt: "desc" } });
+async function NotesList({ userId }: { userId: string }) {
+  const notes = await prisma.note.findMany({ where: { userId }, orderBy: { updatedAt: "desc" } });
 
   return (
     <section className="flex flex-col gap-4">

@@ -4,13 +4,15 @@ import { getLevelMap } from "@/lib/skill-progress";
 import { isProjectUnlocked } from "@/lib/project-progress";
 import { prisma } from "@/lib/db";
 import { ProjectStatusBadge, type ProjectStatus } from "@/components/ProjectStatusBadge";
+import { requireUserId } from "@/lib/current-user";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProjetsPage() {
+  const userId = await requireUserId();
   const [levels, submissions] = await Promise.all([
-    getLevelMap(),
-    prisma.projectSubmission.findMany(),
+    getLevelMap(userId),
+    prisma.projectSubmission.findMany({ where: { userId } }),
   ]);
   const submissionByProjectId = new Map(submissions.map((s) => [s.projectId, s]));
 

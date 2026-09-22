@@ -14,10 +14,10 @@ interface QuizLogResult {
   passed: boolean;
 }
 
-export async function getRecentActivityFeed(limit = 15): Promise<ActivityFeedItem[]> {
+export async function getRecentActivityFeed(userId: string, limit = 15): Promise<ActivityFeedItem[]> {
   const [logs, submissions] = await Promise.all([
-    prisma.activityLog.findMany({ orderBy: { completedAt: "desc" }, take: limit }),
-    prisma.exerciseSubmission.findMany({ orderBy: { updatedAt: "desc" }, take: limit }),
+    prisma.activityLog.findMany({ where: { userId }, orderBy: { completedAt: "desc" }, take: limit }),
+    prisma.exerciseSubmission.findMany({ where: { userId }, orderBy: { updatedAt: "desc" }, take: limit }),
   ]);
 
   const items: ActivityFeedItem[] = [];
@@ -79,10 +79,10 @@ export async function getRecentActivityFeed(limit = 15): Promise<ActivityFeedIte
   return items.slice(0, limit);
 }
 
-export async function getActivityCount(): Promise<number> {
+export async function getActivityCount(userId: string): Promise<number> {
   const [logCount, submissionCount] = await Promise.all([
-    prisma.activityLog.count(),
-    prisma.exerciseSubmission.count(),
+    prisma.activityLog.count({ where: { userId } }),
+    prisma.exerciseSubmission.count({ where: { userId } }),
   ]);
   return logCount + submissionCount;
 }

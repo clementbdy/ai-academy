@@ -2,8 +2,8 @@ import { prisma } from "@/lib/db";
 import type { LevelMap } from "@/lib/progress";
 import type { ExerciseSubmission } from "@/generated/prisma/client";
 
-export async function getLevelMap(): Promise<LevelMap> {
-  const rows = await prisma.skillProgress.findMany();
+export async function getLevelMap(userId: string): Promise<LevelMap> {
+  const rows = await prisma.skillProgress.findMany({ where: { userId } });
   const map: LevelMap = {};
   for (const row of rows) {
     map[row.skillId] = row.level;
@@ -27,11 +27,14 @@ export interface SkillActivityState {
  * soumissions déjà enregistrés — utilisé à la fois pour recalculer le
  * niveau (src/lib/evaluation.ts) et pour préremplir l'UI au chargement.
  */
-export async function getSkillActivityState(skillId: string): Promise<SkillActivityState> {
+export async function getSkillActivityState(
+  userId: string,
+  skillId: string,
+): Promise<SkillActivityState> {
   const [lessonLogs, quizLogs, submissions] = await Promise.all([
-    prisma.activityLog.findMany({ where: { skillId, activityType: "lesson" } }),
-    prisma.activityLog.findMany({ where: { skillId, activityType: "quiz" } }),
-    prisma.exerciseSubmission.findMany({ where: { skillId } }),
+    prisma.activityLog.findMany({ where: { userId, skillId, activityType: "lesson" } }),
+    prisma.activityLog.findMany({ where: { userId, skillId, activityType: "quiz" } }),
+    prisma.exerciseSubmission.findMany({ where: { userId, skillId } }),
   ]);
 
   const readLessonIds = new Set(lessonLogs.map((log) => log.activityId));

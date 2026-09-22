@@ -11,6 +11,7 @@ import {
   formatEstimatedMinutes,
 } from "@/lib/time-estimate";
 import { getRealTimeSpentSeconds } from "@/lib/time-tracking";
+import { requireUserId } from "@/lib/current-user";
 
 // Cette page lit la progression en base à chaque visite : elle ne doit pas
 // être figée dans le shell statique généré au build.
@@ -19,6 +20,7 @@ export const dynamic = "force-dynamic";
 const dateFormatter = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
 export default async function DashboardPage() {
+  const userId = await requireUserId();
   const [
     levels,
     promptCount,
@@ -28,13 +30,13 @@ export default async function DashboardPage() {
     activeObjectives,
     realTimeSpentSec,
   ] = await Promise.all([
-    getLevelMap(),
-    prisma.savedPrompt.count(),
-    prisma.toolFavorite.count(),
-    prisma.note.count(),
-    prisma.projectSubmission.findMany(),
-    prisma.objective.findMany({ where: { status: "active" } }),
-    getRealTimeSpentSeconds(),
+    getLevelMap(userId),
+    prisma.savedPrompt.count({ where: { userId } }),
+    prisma.toolFavorite.count({ where: { userId } }),
+    prisma.note.count({ where: { userId } }),
+    prisma.projectSubmission.findMany({ where: { userId } }),
+    prisma.objective.findMany({ where: { userId, status: "active" } }),
+    getRealTimeSpentSeconds(userId),
   ]);
 
   const nextObjective = [...activeObjectives].sort((a, b) => {

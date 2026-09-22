@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { parseStringArray } from "@/lib/json-fields";
 import { Field, TextAreaField } from "@/components/FormFields";
+import { requireUserId } from "@/lib/current-user";
 import { updatePromptAction, deletePromptAction } from "../../actions";
 
 export const dynamic = "force-dynamic";
@@ -12,8 +13,9 @@ export default async function PromptDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+  const userId = await requireUserId();
   const prompt = await prisma.savedPrompt.findUnique({ where: { id } });
-  if (!prompt) notFound();
+  if (!prompt || prompt.userId !== userId) notFound();
 
   const tags = parseStringArray(prompt.tags).join(", ");
 

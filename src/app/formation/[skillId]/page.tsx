@@ -15,6 +15,7 @@ import { QuizRunner } from "@/components/QuizRunner";
 import { GuidedExerciseRunner } from "@/components/GuidedExerciseRunner";
 import { CriteriaExerciseRunner } from "@/components/CriteriaExerciseRunner";
 import { MarkLessonReadButton } from "@/components/MarkLessonReadButton";
+import { requireUserId } from "@/lib/current-user";
 import type { Exercise } from "@/content/types";
 import { submitCriteriaExerciseAction } from "./actions";
 
@@ -31,11 +32,12 @@ export default async function SkillPage({
 
   const mod = moduleById.get(skill.moduleId);
   const domain = mod ? domainById.get(mod.domainId) : undefined;
-  const levels = await getLevelMap();
+  const userId = await requireUserId();
+  const levels = await getLevelMap(userId);
   const status = getSkillStatus(skill, levels);
   const unlocked = isSkillUnlocked(skill, levels);
   const currentLevel = getLevel(levels, skill.id);
-  const activityState = unlocked ? await getSkillActivityState(skill.id) : null;
+  const activityState = unlocked ? await getSkillActivityState(userId, skill.id) : null;
 
   return (
     <div className="flex flex-col gap-8">

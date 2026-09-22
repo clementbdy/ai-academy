@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
+import { requireUserId, requireOwnedRecord } from "@/lib/current-user";
 
 function requireField(formData: FormData, key: string): string {
   const value = String(formData.get(key) ?? "").trim();
@@ -20,12 +21,13 @@ function parseTargetDate(formData: FormData): Date | null {
 }
 
 export async function createObjectiveAction(formData: FormData): Promise<void> {
+  const userId = await requireUserId();
   const title = requireField(formData, "title");
   const description = optionalField(formData, "description");
   const targetDate = parseTargetDate(formData);
 
   const created = await prisma.objective.create({
-    data: { title, description: description || null, targetDate },
+    data: { userId, title, description: description || null, targetDate },
   });
   revalidatePath("/objectifs");
   revalidatePath("/");
@@ -33,6 +35,9 @@ export async function createObjectiveAction(formData: FormData): Promise<void> {
 }
 
 export async function updateObjectiveAction(id: string, formData: FormData): Promise<void> {
+  const userId = await requireUserId();
+  await requireOwnedRecord(() => prisma.objective.findUnique({ where: { id } }), userId);
+
   const title = requireField(formData, "title");
   const description = optionalField(formData, "description");
   const targetDate = parseTargetDate(formData);
@@ -48,12 +53,18 @@ export async function updateObjectiveAction(id: string, formData: FormData): Pro
 }
 
 export async function setObjectiveStatusAction(id: string, status: string): Promise<void> {
+  const userId = await requireUserId();
+  await requireOwnedRecord(() => prisma.objective.findUnique({ where: { id } }), userId);
+
   await prisma.objective.update({ where: { id }, data: { status } });
   revalidatePath("/objectifs");
   revalidatePath("/");
 }
 
 export async function deleteObjectiveAction(id: string): Promise<void> {
+  const userId = await requireUserId();
+  await requireOwnedRecord(() => prisma.objective.findUnique({ where: { id } }), userId);
+
   await prisma.objective.delete({ where: { id } });
   revalidatePath("/objectifs");
   revalidatePath("/");

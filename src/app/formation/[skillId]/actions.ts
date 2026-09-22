@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { recomputeSkillLevel } from "@/lib/evaluation";
 import { exerciseById } from "@/content/registry";
 import type { CriterionResult } from "@/lib/criteria";
+import { requireUserId } from "@/lib/current-user";
 
 function revalidateAfterProgress(skillId: string) {
   revalidatePath("/");
@@ -17,15 +18,16 @@ export async function markLessonReadAction(
   lessonId: string,
   timeSpentSec: number,
 ): Promise<void> {
+  const userId = await requireUserId();
   const existing = await prisma.activityLog.findFirst({
-    where: { skillId, activityType: "lesson", activityId: lessonId },
+    where: { userId, skillId, activityType: "lesson", activityId: lessonId },
   });
   if (!existing) {
     await prisma.activityLog.create({
-      data: { skillId, activityType: "lesson", activityId: lessonId, result: "read", timeSpentSec },
+      data: { userId, skillId, activityType: "lesson", activityId: lessonId, result: "read", timeSpentSec },
     });
   }
-  await recomputeSkillLevel(skillId);
+  await recomputeSkillLevel(userId, skillId);
   revalidateAfterProgress(skillId);
 }
 
@@ -43,6 +45,7 @@ export async function submitQuizAction(
   answers: Record<string, number>,
   timeSpentSec: number,
 ): Promise<QuizResult> {
+  const userId = await requireUserId();
   const exercise = exerciseById.get(exerciseId);
   if (!exercise || exercise.type !== "quiz" || exercise.skillId !== skillId) {
     throw new Error("Quiz introuvable pour cette compétence.");
@@ -61,6 +64,7 @@ export async function submitQuizAction(
 
   await prisma.activityLog.create({
     data: {
+      userId,
       skillId,
       activityType: "quiz",
       activityId: exerciseId,
@@ -69,7 +73,7 @@ export async function submitQuizAction(
     },
   });
 
-  await recomputeSkillLevel(skillId);
+  await recomputeSkillLevel(userId, skillId);
   revalidateAfterProgress(skillId);
 
   return { score, passed, correctCount, total, correctByQuestion };
@@ -87,6 +91,7 @@ export async function submitGuidedExerciseAction(
   steps: GuidedStepResult[],
   timeSpentSec: number,
 ): Promise<{ status: string }> {
+  const userId = await requireUserId();
   const exercise = exerciseById.get(exerciseId);
   if (!exercise || exercise.type !== "guided" || exercise.skillId !== skillId) {
     throw new Error("Exercice introuvable pour cette compétence.");
@@ -96,8 +101,9 @@ export async function submitGuidedExerciseAction(
     ? "validated"
     : "needs_revision";
 
-  const existing = await prisma.exerciseSubmission.findFirst({ where: { exerciseId } });
+  const existing = await prisma.exerciseSubmission.findFirst({ where: { userId, exerciseId } });
   const data = {
+    userId,
     exerciseId,
     skillId,
     content: JSON.stringify(steps),
@@ -111,7 +117,7 @@ export async function submitGuidedExerciseAction(
     await prisma.exerciseSubmission.create({ data });
   }
 
-  await recomputeSkillLevel(skillId);
+  await recomputeSkillLevel(userId, skillId);
   revalidateAfterProgress(skillId);
 
   return { status };
@@ -124,6 +130,7 @@ export async function submitCriteriaExerciseAction(
   criteria: CriterionResult[],
   timeSpentSec: number,
 ): Promise<{ status: string }> {
+  const userId = await requireUserId();
   const exercise = exerciseById.get(exerciseId);
   if (
     !exercise ||
@@ -135,8 +142,9 @@ export async function submitCriteriaExerciseAction(
 
   const status = criteria.length > 0 && criteria.every((c) => c.met) ? "validated" : "needs_revision";
 
-  const existing = await prisma.exerciseSubmission.findFirst({ where: { exerciseId } });
+  const existing = await prisma.exerciseSubmission.findFirst({ where: { userId, exerciseId } });
   const data = {
+    userId,
     exerciseId,
     skillId,
     content,
@@ -150,7 +158,7 @@ export async function submitCriteriaExerciseAction(
     await prisma.exerciseSubmission.create({ data });
   }
 
-  await recomputeSkillLevel(skillId);
+  await recomputeSkillLevel(userId, skillId);
   revalidateAfterProgress(skillId);
 
   return { status };

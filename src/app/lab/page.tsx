@@ -1,15 +1,17 @@
 import Link from "next/link";
 import { prisma } from "@/lib/db";
 import { parseStringArray } from "@/lib/json-fields";
+import { requireUserId } from "@/lib/current-user";
 
 export const dynamic = "force-dynamic";
 
 const dateFormatter = new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
 
 export default async function LabPage() {
+  const userId = await requireUserId();
   const [prompts, workflows] = await Promise.all([
-    prisma.savedPrompt.findMany({ orderBy: { updatedAt: "desc" } }),
-    prisma.workflow.findMany({ orderBy: { updatedAt: "desc" } }),
+    prisma.savedPrompt.findMany({ where: { userId }, orderBy: { updatedAt: "desc" } }),
+    prisma.workflow.findMany({ where: { userId }, orderBy: { updatedAt: "desc" } }),
   ]);
 
   return (

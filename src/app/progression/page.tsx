@@ -8,6 +8,7 @@ import { getActivityCount, getRecentActivityFeed } from "@/lib/activity-feed";
 import { getGlobalStats, getLevel, getSkillStatus } from "@/lib/progress";
 import { ProgressBar } from "@/components/ProgressBar";
 import { SkillStatusBadge } from "@/components/SkillStatusBadge";
+import { requireUserId } from "@/lib/current-user";
 
 export const dynamic = "force-dynamic";
 
@@ -19,10 +20,11 @@ const dateFormatter = new Intl.DateTimeFormat("fr-FR", {
 });
 
 export default async function ProgressionPage() {
+  const userId = await requireUserId();
   const [levels, activityCount, feed] = await Promise.all([
-    getLevelMap(),
-    getActivityCount(),
-    getRecentActivityFeed(15),
+    getLevelMap(userId),
+    getActivityCount(userId),
+    getRecentActivityFeed(userId, 15),
   ]);
   const stats = getGlobalStats(levels);
 
