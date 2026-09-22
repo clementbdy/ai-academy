@@ -1,5 +1,7 @@
 # AI Academy
 
+[github.com/clementbdy/ai-academy](https://github.com/clementbdy/ai-academy)
+
 Mon école personnelle de l'intelligence artificielle — une application web pour apprendre à utiliser l'IA de façon concrète et pratique, pas pour devenir chercheur en ML.
 
 Philosophie : **apprendre → pratiquer → créer → automatiser → maîtriser**. Ce n'est ni une bibliothèque de cours passive, ni un simple site vitrine : chaque compétence se débloque par des prérequis réels, se valide par des exercices réellement corrigés, et progresse à travers 6 niveaux de maîtrise calculés à partir de l'activité effective de l'utilisateur.
